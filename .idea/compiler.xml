@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="disable-date-admin" />
+        <module name="disable-date-oauth2" />
+        <module name="disable-date-nacos" />
+        <module name="disable-date-relation" />
+        <module name="disable-date-common" />
+        <module name="disable-date-gateway" />
+        <module name="disable-date-personinfo" />
+        <module name="disable-date-square" />
+        <module name="disable-date-message" />
+        <module name="disable-date-third-services" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="disable-date-auth" target="8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
