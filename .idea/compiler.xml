@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -10,7 +11,6 @@
         <module name="disable-date-oauth2" />
         <module name="disable-date-nacos" />
         <module name="disable-date-relation" />
-        <module name="disable-date-common" />
         <module name="disable-date-gateway" />
         <module name="disable-date-personinfo" />
         <module name="disable-date-square" />
@@ -20,11 +20,14 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="disable-date-auth" target="8" />
+      <module name="disable-date-common" target="8" />
+      <module name="disable-date-diary" target="8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="disable-date-admin" options="-parameters" />
+      <module name="disable-date-message" options="" />
     </option>
   </component>
 </project>

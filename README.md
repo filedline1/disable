@@ -10,7 +10,7 @@
 |-- disable-date
     |-- disable-date-admin -- 后台管理系统后端
     |-- disable-date-message -- 即时通讯微服务
-    |-- disable-date-common -- 通用工具类
+    |-- disable-date-disable.date.message.common -- 通用工具类
     |-- disable-date-relation -- 朋友关注关系微服务
     |-- disable-date-gateway -- 网关微服务（对用户来说分为VIP用户、用户、游客三个级别）
     |-- disable-date-nacos -- 服务注册，服务发现，灰度发布

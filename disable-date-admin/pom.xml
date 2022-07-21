@@ -43,7 +43,7 @@
         <lombok.version>1.18.4</lombok.version>
 
         <!--wagon plugin 配置-->
-        <service-path>/work/renren</service-path>
+        <disable.date.message.service-path>/work/renren</disable.date.message.service-path>
         <pack-name>${project.artifactId}-${project.version}.jar</pack-name>
         <remote-addr>192.168.1.10:22</remote-addr>
         <remote-username>root</remote-username>
@@ -58,7 +58,7 @@
         </dependency>
         <!--        <dependency>-->
         <!--            <groupId>org.springframework.cloud</groupId>-->
-        <!--            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>-->
+        <!--            <artifactId>spring-cloud-starter-alibaba-nacos-disable.date.message.config</artifactId>-->
         <!--        </dependency>-->
 
         <!-- Sentinel -->
