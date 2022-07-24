@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.personInfo.mapper.RequirementsMapper">
+    <resultMap id="BaseResultMap" type="com.personInfo.bean.Requirement">
+        <id column="person_id" jdbcType="INTEGER" property="personId"/>
+        <result column="age_range" jdbcType="VARCHAR" property="ageRange"/>
+        <result column="height_range" jdbcType="VARCHAR" property="heightRange"/>
+        <result column="marry_status" jdbcType="VARCHAR" property="marryStatus"/>
+        <result column="education_background" jdbcType="VARCHAR" property="educationBackground"/>
+        <result column="income" jdbcType="VARCHAR" property="income"/>
+        <result column="housing_status" jdbcType="VARCHAR" property="housingStatus"/>
+        <result column="car_status" jdbcType="VARCHAR" property="carStatus"/>
+        <result column="other_requirements" jdbcType="INTEGER" property="otherRequirements"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        person_id, age_range, height_range, marry_status, education_background, income, housing_status, car_status, other_requirements
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `tb_disable_date_requirements`
+        where person_id = #{personId,jdbcType=INTEGER}
+    </select>
+
+
+    <select id="findRecordList" parameterType="Map" resultMap="BaseResultMap">
+        SELECT * FROM
+        `tb_disable_date_requirements`
+        <if test="start!=null and limit!=null">
+            LIMIT #{start},#{limit}
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="com.personInfo.bean.Requirement">
+    insert into `tb_disable_date_requirements` ( person_id, age_range, height_range, marry_status,
+                                                education_background, income, housing_status, car_status, other_requirements)
+    values (#{personId,jdbcType=INTEGER}, #{ageRange,jdbcType=VARCHAR}, #{heightRange,jdbcType=VARCHAR},
+            #{marryStatus,jdbcType=VARCHAR},#{educationBackground,jdbcType=VARCHAR},#{income,jdbcType=VARCHAR},
+            #{housingStatus,jdbcType=VARCHAR},#{carStatus,jdbcType=VARCHAR},#{otherRequirements,jdbcType=VARCHAR}
+      )
+    </insert>
+
+    <insert id="insertBatch" parameterType="com.personInfo.bean.Requirement">
+        insert into `tb_disable_date_requirements` ( person_id, age_range, height_range, marry_status,
+        education_background, income, housing_status, car_status, other_requirements)
+        values
+        <foreach collection="recordItems" item="recordItem" separator=",">
+            (
+                #{recordItem.personId,jdbcType=INTEGER}, #{recordItem.ageRange,jdbcType=VARCHAR}, #{recordItem.heightRange,jdbcType=VARCHAR},
+                #{recordItem.marryStatus,jdbcType=VARCHAR},#{recordItem.educationBackground,jdbcType=VARCHAR},#{recordItem.income,jdbcType=VARCHAR},
+                #{recordItem.housingStatus,jdbcType=VARCHAR},#{recordItem.carStatus,jdbcType=VARCHAR},#{recordItem.otherRequirements,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="personId"
+            parameterType="com.personInfo.bean.Requirement">
+        insert into `tb_disable_date_requirements`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="personId != null">
+                person_id,
+            </if>
+            <if test="ageRange != null">
+                age_range,
+            </if>
+            <if test="heightRange != null">
+                height_range,
+            </if>
+            <if test="marryStatus != null">
+                marry_status,
+            </if>
+            <if test="educationBackground != null">
+                education_background,
+            </if>
+            <if test="income != null">
+                income,
+            </if>
+            <if test="housingStatus != null">
+                housing_status,
+            </if>
+            <if test="carStatus != null">
+                car_status,
+            </if>
+            <if test="otherRequirements != null">
+                other_requirements,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="personId != null">
+                #{personId,jdbcType=INTEGER},
+            </if>
+            <if test="ageRange != null">
+                #{ageRange,jdbcType=VARCHAR},
+            </if>
+            <if test="heightRange != null">
+                #{heightRange,jdbcType=VARCHAR},
+            </if>
+            <if test="marryStatus != null">
+                #{marryStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="educationBackground != null">
+                #{educationBackground,jdbcType=VARCHAR},
+            </if>
+            <if test="income != null">
+                #{income,jdbcType=VARCHAR},
+            </if>
+            <if test="housingStatus != null">
+                #{housingStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="carStatus != null">
+                #{carStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="otherRequirements != null">
+                #{otherRequirements,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.personInfo.bean.Requirement">
+        update `tb_disable_date_requirements`
+        <set>
+            <if test="personId != null">
+                person_id = #{personId,jdbcType=INTEGER},
+            </if>
+            <if test="ageRange != null">
+                age_range = #{ageRange,jdbcType=VARCHAR},
+            </if>
+            <if test="heightRange != null">
+                height_range = #{heightRange,jdbcType=VARCHAR},
+            </if>
+            <if test="marryStatus != null">
+                marry_status = #{marryStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="educationBackground != null">
+                education_background = #{educationBackground,jdbcType=VARCHAR},
+            </if>
+            <if test="income != null">
+                income = #{income,jdbcType=VARCHAR},
+            </if>
+            <if test="housingStatus != null">
+                housing_status = #{housingStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="carStatus != null">
+                car_status = #{carStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="otherRequirements != null">
+                other_requirements = #{otherRequirements,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where person_id = #{personId,jdbcType=INTEGER}
+    </update>
+    <update id="update" parameterType="com.personInfo.bean.Requirement">
+    update `tb_disable_date_requirements`
+    set
+        age_range = #{ageRange,jdbcType=VARCHAR},
+        height_range = #{heightRange,jdbcType=VARCHAR},
+        marry_status = #{marryStatus,jdbcType=VARCHAR},
+        education_background = #{educationBackground,jdbcType=VARCHAR},
+        income = #{income,jdbcType=VARCHAR},
+        housing_status = #{housingStatus,jdbcType=VARCHAR},
+        car_status = #{carStatus,jdbcType=VARCHAR},
+        other_requirements = #{otherRequirements,jdbcType=VARCHAR}
+    where person_id = #{personId,jdbcType=INTEGER}
+  </update>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from `tb_disable_date_requirements` where person_id = #{id}
+    </delete>
+
+
+</mapper>

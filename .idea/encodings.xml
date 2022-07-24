@@ -4,5 +4,8 @@
     <file url="file://$PROJECT_DIR$/disable-date-admin/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/disable-date-admin/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/disable-date-message/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/disable-date-personinfo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/disable-date-personinfo/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/disable-date-relation/src/main/java" charset="UTF-8" />
   </component>
 </project>

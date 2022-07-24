@@ -15,8 +15,10 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class LoginCtrl {
+
     @Autowired
     LoginService loginService;
+
     @GetMapping("/")
     public String tologin(){
         return "user/login";
@@ -28,8 +30,9 @@ public class LoginCtrl {
     @ResponseBody
     public Result login(@RequestBody Login login, HttpSession session){
         login.setPassword(Md5Util.StringInMd5(login.getPassword()));
+        System.out.println(login);
         String userid = loginService.justLogin(login);
-        if(userid==null){
+        if(userid == null){
             return Result.error().message("账号或者密码错误");
         }
         session.setAttribute("userid",userid);

@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.personInfo.mapper.PersonDetailInfoMapper">
+    <resultMap id="BaseResultMap" type="com.personInfo.bean.PersonDetailInfo">
+        <id column="person_id" jdbcType="INTEGER" property="personId"/>
+        <result column="disable_type" jdbcType="VARCHAR" property="disableType"/>
+        <result column="disable_level" jdbcType="TINYINT" property="disableLevel"/>
+        <result column="is_provide" jdbcType="TINYINT" property="isProvide"/>
+        <result column="auxiliary_tool" jdbcType="VARCHAR" property="auxiliaryTool"/>
+        <result column="cause" jdbcType="VARCHAR" property="cause"/>
+        <result column="is_genetic" jdbcType="TINYINT" property="isGenetic"/>
+        <result column="parent_status" jdbcType="VARCHAR" property="parentStatus"/>
+        <result column="brother_number" jdbcType="TINYINT" property="brotherNumber"/>
+        <result column="living_will" jdbcType="TINYINT" property="livingWill"/>
+        <result column="is_smoking" jdbcType="TINYINT" property="isSmoking"/>
+        <result column="marry_form" jdbcType="TINYINT" property="marryForm"/>
+        <result column="is_drinking" jdbcType="TINYINT" property="isDrinking"/>
+        <result column="fertility_status" jdbcType="VARCHAR" property="fertilityStatus"/>
+        <result column="keeping_status" jdbcType="VARCHAR" property="keepingStatus"/>
+        <result column="hobby" jdbcType="VARCHAR" property="hobby"/>
+        <result column="blood_type" jdbcType="TINYINT" property="bloodType"/>
+        <result column="habit" jdbcType="VARCHAR" property="habit"/>
+        <result column="company_type" jdbcType="TINYINT" property="companyType"/>
+        <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
+        <result column="work_industry" jdbcType="VARCHAR" property="workIndustry"/>
+        <result column="housing_location" jdbcType="VARCHAR" property="housingLocation"/>
+        <result column="person_tag" jdbcType="VARCHAR" property="personTag"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        person_id, disable_type, disable_level, is_provide, auxiliary_tool, cause, is_genetic, parent_status, brother_number,
+        living_will, is_smoking, marry_form, is_drinking, fertility_status, keeping_status, hobby, blood_type,
+        habit, company_type, company_name, work_industry, housing_location, person_tag
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `tb_disable_date_person_detail_info`
+        where person_id = #{personId,jdbcType=INTEGER}
+    </select>
+
+
+    <select id="findRecordList" parameterType="Map" resultMap="BaseResultMap">
+        SELECT * FROM
+        `tb_disable_date_person_detail_info`
+        <if test = "start != null and limit != null">
+            LIMIT #{start},#{limit}
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="com.personInfo.bean.PersonDetailInfo">
+    insert into `tb_disable_date_person_detail_info`
+        (person_id, disable_type, disable_level, is_provide, auxiliary_tool, cause, is_genetic, parent_status, brother_number,
+         living_will, is_smoking, marry_form, is_drinking, fertility_status, keeping_status, hobby, blood_type,
+         habit, company_type, company_name, work_industry, housing_location, person_tag)
+    values (#{personId,jdbcType=INTEGER}, #{disableType,jdbcType=VARCHAR}, #{disableLevel,jdbcType=INTEGER},
+            #{isProvide,jdbcType=INTEGER},#{auxiliaryTool,jdbcType=VARCHAR},#{cause,jdbcType=VARCHAR},
+            #{isGenetic,jdbcType=TINYINT},#{parentStatus,jdbcType=VARCHAR},#{brotherNumber,jdbcType=TINYINT},
+            #{livingWill,jdbcType=TINYINT},#{isSmoking,jdbcType=TINYINT},#{marryForm,jdbcType=TINYINT},
+            #{isDrinking,jdbcType=TINYINT},#{fertilityStatus,jdbcType=VARCHAR},#{keepingStatus,jdbcType=TINYINT},
+            #{hobby,jdbcType=VARCHAR},#{bloodType,jdbcType=TINYINT},#{habit,jdbcType=VARCHAR},#{companyType,jdbcType=TINYINT},
+            #{companyName,jdbcType=VARCHAR},#{workIndustry,jdbcType=VARCHAR},#{housingLocation,jdbcType=VARCHAR},
+            #{personTag,jdbcType=VARCHAR}
+      )
+    </insert>
+
+    <insert id="insertBatch" parameterType="com.personInfo.bean.PersonDetailInfo">
+        insert into `tb_disable_date_person_detail_info`
+        ( person_id, disable_type, disable_level, is_provide, auxiliary_tool, cause, is_genetic, parent_status, brother_number,
+        living_will, is_smoking, marry_form, is_drinking, fertility_status, keeping_status, hobby, blood_type,
+        habit, company_type, company_name, work_industry, housing_location, person_tag)
+        values
+        <foreach collection="recordItems" item="recordItem" separator=",">
+            (
+                #{recordItem.personId,jdbcType=INTEGER}, #{recordItem.disableType,jdbcType=VARCHAR}, #{recordItem.disableLevel,jdbcType=INTEGER},
+                #{recordItem.isProvide,jdbcType=INTEGER},#{recordItem.auxiliaryTool,jdbcType=VARCHAR},#{recordItem.cause,jdbcType=VARCHAR},
+                #{recordItem.isGenetic,jdbcType=TINYINT},#{recordItem.parentStatus,jdbcType=VARCHAR},#{recordItem.brotherNumber,jdbcType=TINYINT},
+                #{recordItem.livingWill,jdbcType=TINYINT},#{recordItem.isSmoking,jdbcType=TINYINT},#{recordItem.marryForm,jdbcType=TINYINT},
+                #{recordItem.isDrinking,jdbcType=TINYINT},#{recordItem.fertilityStatus,jdbcType=VARCHAR},#{recordItem.keepingStatus,jdbcType=TINYINT},
+                #{recordItem.hobby,jdbcType=VARCHAR},#{recordItem.bloodType,jdbcType=TINYINT},#{recordItem.habit,jdbcType=VARCHAR},#{recordItem.companyType,jdbcType=TINYINT},
+                #{recordItem.companyName,jdbcType=VARCHAR},#{recordItem.workIndustry,jdbcType=VARCHAR},#{recordItem.housingLocation,jdbcType=VARCHAR},
+                #{recordItem.personTag,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="personId"
+            parameterType="com.personInfo.bean.PersonDetailInfo">
+        insert into `tb_disable_date_person_detail_info`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="personId != null">
+                person_id,
+            </if>
+            <if test="disableType != null">
+                disable_type,
+            </if>
+            <if test="disableLevel != null">
+                disable_level,
+            </if>
+            <if test="isProvide != null">
+                is_provide,
+            </if>
+            <if test="auxiliaryTool != null">
+                auxiliary_tool,
+            </if>
+            <if test="cause != null">
+                cause,
+            </if>
+            <if test="isGenetic != null">
+                is_genetic,
+            </if>
+            <if test="parentStatus != null">
+                parent_status,
+            </if>
+            <if test="brotherNumber != null">
+                brother_number,
+            </if>
+            <if test="livingWill != null">
+                living_will,
+            </if>
+            <if test="isSmoking != null">
+                is_smoking,
+            </if>
+            <if test="marryForm != null">
+                marry_form,
+            </if>
+            <if test="isDrinking != null">
+                is_drinking,
+            </if>
+            <if test="fertilityStatus != null">
+                fertility_status,
+            </if>
+            <if test="keepingStatus != null">
+                keeping_status,
+            </if>
+            <if test="hobby != null">
+                hobby,
+            </if>
+            <if test="bloodType != null">
+                blood_type,
+            </if>
+            <if test="habit != null">
+                habit,
+            </if>
+            <if test="companyType != null">
+                company_type,
+            </if>
+            <if test="companyName != null">
+                company_name,
+            </if>
+            <if test="workIndustry != null">
+                work_industry,
+            </if>
+            <if test="housingLocation != null">
+                housing_location,
+            </if>
+            <if test="personTag != null">
+                person_tag,
+            </if>
+        </trim>
+
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="personId != null">
+                #{personId,jdbcType=INTEGER},
+            </if>
+            <if test="disableType != null">
+                #{disableType,jdbcType=VARCHAR},
+            </if>
+            <if test="disableLevel != null">
+                #{disableLevel,jdbcType=INTEGER},
+            </if>
+            <if test="isProvide != null">
+                #{isProvide,jdbcType=INTEGER},
+            </if>
+            <if test="auxiliaryTool != null">
+                #{auxiliaryTool,jdbcType=VARCHAR},
+            </if>
+            <if test="cause != null">
+                #{cause,jdbcType=VARCHAR},
+            </if>
+            <if test="isGenetic != null">
+                #{isGenetic,jdbcType=TINYINT},
+            </if>
+            <if test="parentStatus != null">
+                #{parentStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="brotherNumber != null">
+                #{brotherNumber,jdbcType=TINYINT},
+            </if>
+            <if test="livingWill != null">
+                #{livingWill,jdbcType=TINYINT},
+            </if>
+            <if test="isSmoking != null">
+                #{isSmoking,jdbcType=TINYINT},
+            </if>
+            <if test="marryForm != null">
+                #{marryForm,jdbcType=TINYINT},
+            </if>
+            <if test="isDrinking != null">
+                #{isDrinking,jdbcType=TINYINT},
+            </if>
+            <if test="fertilityStatus != null">
+                #{fertilityStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="keepingStatus != null">
+                #{keepingStatus,jdbcType=TINYINT},
+            </if>
+            <if test="hobby != null">
+                #{hobby,jdbcType=VARCHAR},
+            </if>
+            <if test="bloodType != null">
+                #{bloodType,jdbcType=TINYINT},
+            </if>
+            <if test="habit != null">
+                #{habit,jdbcType=VARCHAR},
+            </if>
+            <if test="companyType != null">
+                #{companyType,jdbcType=TINYINT},
+            </if>
+            <if test="companyName != null">
+                #{companyName,jdbcType=VARCHAR},
+            </if>
+            <if test="workIndustry != null">
+                #{workIndustry,jdbcType=VARCHAR},
+            </if>
+            <if test="housingLocation != null">
+                #{housingLocation,jdbcType=VARCHAR},
+            </if>
+            <if test="personTag != null">
+                #{personTag,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.personInfo.bean.PersonDetailInfo">
+        update `tb_disable_date_person_detail_info`
+        <set>
+            <if test="disableType != null">
+                disable_type = #{disableType,jdbcType=VARCHAR},
+            </if>
+            <if test="disableLevel != null">
+                disable_level = #{disableLevel,jdbcType=INTEGER},
+            </if>
+            <if test="isProvide != null">
+                is_provide = #{isProvide,jdbcType=INTEGER},
+            </if>
+            <if test="auxiliaryTool != null">
+                auxiliary_tool = #{auxiliaryTool,jdbcType=VARCHAR},
+            </if>
+            <if test="cause != null">
+                cause = #{cause,jdbcType=VARCHAR},
+            </if>
+            <if test="isGenetic != null">
+                is_genetic = #{isGenetic,jdbcType=TINYINT},
+            </if>
+            <if test="parentStatus != null">
+                parent_status = #{parentStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="brotherNumber != null">
+                brother_number = #{brotherNumber,jdbcType=TINYINT},
+            </if>
+            <if test="livingWill != null">
+                living_will = #{livingWill,jdbcType=TINYINT},
+            </if>
+            <if test="isSmoking != null">
+                is_smoking = #{isSmoking,jdbcType=TINYINT},
+            </if>
+            <if test="marryForm != null">
+                marry_form = #{marryForm,jdbcType=TINYINT},
+            </if>
+            <if test="isDrinking != null">
+                is_drinking = #{isDrinking,jdbcType=TINYINT},
+            </if>
+            <if test="fertilityStatus != null">
+                fertility_status = #{fertilityStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="keepingStatus != null">
+                keeping_status = #{keepingStatus,jdbcType=TINYINT},
+            </if>
+            <if test="hobby != null">
+                hobby = #{hobby,jdbcType=VARCHAR},
+            </if>
+            <if test="bloodType != null">
+                blood_type = #{bloodType,jdbcType=TINYINT},
+            </if>
+            <if test="habit != null">
+                habit = #{habit,jdbcType=VARCHAR},
+            </if>
+            <if test="companyType != null">
+                company_type = #{companyType,jdbcType=TINYINT},
+            </if>
+            <if test="companyName != null">
+                company_name = #{companyName,jdbcType=VARCHAR},
+            </if>
+            <if test="workIndustry != null">
+                work_industry = #{workIndustry,jdbcType=VARCHAR},
+            </if>
+            <if test="housingLocation != null">
+                housing_location = #{housingLocation,jdbcType=VARCHAR},
+            </if>
+            <if test="personTag != null">
+                person_tag = #{personTag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where person_id = #{personId,jdbcType=INTEGER}
+    </update>
+
+
+
+    <update id="update" parameterType="com.personInfo.bean.PersonDetailInfo">
+    update `tb_disable_date_person_detail_info`
+    set
+        disable_type = #{disableType,jdbcType=VARCHAR},
+        disable_level = #{disableLevel,jdbcType=INTEGER},
+        is_provide = #{isProvide,jdbcType=INTEGER},
+        auxiliary_tool = #{auxiliaryTool,jdbcType=VARCHAR},
+        cause = #{cause,jdbcType=VARCHAR},
+        is_genetic = #{isGenetic,jdbcType=TINYINT},
+        parent_status = #{parentStatus,jdbcType=VARCHAR},
+        brother_number = #{brotherNumber,jdbcType=TINYINT},
+        living_will = #{livingWill,jdbcType=TINYINT},
+        is_smoking = #{isSmoking,jdbcType=TINYINT},
+        marry_form = #{marryForm,jdbcType=TINYINT},
+        is_drinking = #{isDrinking,jdbcType=TINYINT},
+        fertility_status = #{fertilityStatus,jdbcType=VARCHAR},
+        keeping_status = #{keepingStatus,jdbcType=TINYINT},
+        hobby = #{hobby,jdbcType=VARCHAR},
+        blood_type = #{bloodType,jdbcType=TINYINT},
+        habit = #{habit,jdbcType=VARCHAR},
+        company_type = #{companyType,jdbcType=TINYINT},
+        company_name = #{companyName,jdbcType=VARCHAR},
+        work_industry = #{workIndustry,jdbcType=VARCHAR},
+        housing_location = #{housingLocation,jdbcType=VARCHAR},
+        person_tag = #{personTag,jdbcType=VARCHAR}
+    where person_id = #{personId,jdbcType=INTEGER}
+  </update>
+
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from `tb_disable_date_person_detail_info` where person_id =
+            #{id}
+    </delete>
+
+</mapper>

@@ -26,6 +26,7 @@ public class MyConfig extends WebMvcConfigurerAdapter {
         };
         return adapter;
     }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //注册TestInterceptor拦截器

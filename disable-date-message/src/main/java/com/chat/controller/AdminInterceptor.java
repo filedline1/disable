@@ -8,11 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-/**
- * @Description:拦截器
- * @author: zk
- * @date: 2019年9月19日 下午2:20:57
- */
+
 public class AdminInterceptor implements  HandlerInterceptor {
 
     /**
@@ -30,8 +26,10 @@ public class AdminInterceptor implements  HandlerInterceptor {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return false;//如果设置为false时，被请求时，拦截器执行到此处将不会继续操作
-                      //如果设置为true时，请求将会继续执行后面的操作
+        //如果设置为false时，被请求时，拦截器执行到此处将不会继续操作
+        //如果设置为true时，请求将会继续执行后面的操作
+        return false;
+
     }
  
     /**

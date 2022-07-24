@@ -26,22 +26,22 @@ public class Result extends HashMap<String, Object> {
     }
 
     public static Result error(int code, String msg) {
-        Result r = new Result();
-        r.put("code", code);
-        r.put("msg", msg);
-        return r;
+        Result result = new Result();
+        result.put("code", code);
+        result.put("msg", msg);
+        return result;
     }
 
     public static Result success(String msg) {
-        Result r = new Result();
-        r.put("msg", msg);
-        return r;
+        Result result = new Result();
+        result.put("msg", msg);
+        return result;
     }
 
     public static Result success(Map<String, Object> map) {
-        Result r = new Result();
-        r.putAll(map);
-        return r;
+        Result resule = new Result();
+        resule.putAll(map);
+        return resule;
     }
 
     public static Result success() {

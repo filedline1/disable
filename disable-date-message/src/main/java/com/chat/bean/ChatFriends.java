@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data//get set
+@Data
 @Accessors(chain = true)
 public class ChatFriends {
     private Integer id;

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LoginService {
+
     @Autowired
     LoginMapper loginMapper;
     public String justLogin(Login login){
