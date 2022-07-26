@@ -88,9 +88,9 @@
             parameterType="com.personInfo.bean.PersonDetailInfo">
         insert into `tb_disable_date_person_detail_info`
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="personId != null">
-                person_id,
-            </if>
+<!--            <if test="personId != null">-->
+<!--                person_id,-->
+<!--            </if>-->
             <if test="disableType != null">
                 disable_type,
             </if>
@@ -160,9 +160,9 @@
         </trim>
 
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="personId != null">
-                #{personId,jdbcType=INTEGER},
-            </if>
+<!--            <if test="personId != null">-->
+<!--                #{personId,jdbcType=INTEGER},-->
+<!--            </if>-->
             <if test="disableType != null">
                 #{disableType,jdbcType=VARCHAR},
             </if>

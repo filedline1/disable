@@ -58,7 +58,7 @@ public class PersonDetailInfoController {
         if (i > 0){
             return ResultGenerator.genSuccessResult();
         } else {
-            return ResultGenerator.genFailResult("更新择偶要求信息失败");
+            return ResultGenerator.genFailResult("更新个人详细信息失败");
         }
     }
 
@@ -72,7 +72,7 @@ public class PersonDetailInfoController {
     @ResponseBody
     public Result insertInfo(PersonDetailInfo personDetailInfo){
         System.out.println(personDetailInfo);
-        int insert = personDetailInfoService.insert(personDetailInfo);
+        int insert = personDetailInfoService.insertSelective(personDetailInfo);
         if (insert > 0){
             return ResultGenerator.genSuccessResult();
         } else {
@@ -129,8 +129,8 @@ public class PersonDetailInfoController {
      */
     @RequestMapping(value = "/personDetailInfo/delete", method = RequestMethod.DELETE)
     @ResponseBody
-    public Result delete(Integer id){
-        int deleteBatch = personDetailInfoService.delete(id);
+    public Result delete(Integer personId){
+        int deleteBatch = personDetailInfoService.delete(personId);
         if (deleteBatch > 0){
             return ResultGenerator.genSuccessResult("删除成功");
         }

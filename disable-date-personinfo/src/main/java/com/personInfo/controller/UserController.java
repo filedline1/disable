@@ -3,12 +3,12 @@ package com.personInfo.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.personInfo.VO.UserVO;
-import com.personInfo.bean.ApiResult;
-import com.personInfo.bean.User;
+import com.personInfo.bean.*;
 import com.personInfo.common.ServiceResultEnum;
+import com.personInfo.service.PersonBasicInfoService;
+import com.personInfo.service.PersonDetailInfoService;
+import com.personInfo.service.RequirementService;
 import com.personInfo.service.UserService;
 import com.personInfo.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,16 +40,24 @@ public class UserController {
     private RedisTemplate redisTemplate;
 
     @Autowired
+    private PersonDetailInfoService personDetailInfoService;
+
+    @Autowired
+    private PersonBasicInfoService personBasicInfoService;
+
+    @Autowired
+    private RequirementService requirementService;
+
+    @Autowired
     private GetUserFromRedisUtil userUtil;
 
     private static String rightCode;
 
     @PostMapping("/login")
-    public ApiResult login(@RequestParam("loginName") String loginName, @RequestParam("password")String password){
-        try {
+    public ApiResult login(@RequestParam("loginName") String loginName, @RequestParam("password")String password) throws Exception{
             User user = userService.login(loginName, password);
             System.out.println(user);
-            if (user != null && user.getIsDeteled() == 1){
+            if (user != null && user.getIsDeleted() == 1){
                 Map<String,String> map = new HashMap<>();
                 map.put("userId",user.getUserId().toString());
                 map.put("nickName",user.getNickName());
@@ -67,28 +75,27 @@ public class UserController {
                 jsonObject.put("token",token);
                 jsonObject.put("user",userVO);
                 return ApiResultHandler.buildApiResult(200,"登录成功",jsonObject);
-            }else if (user.getIsDeteled() == 2) {
+            }else if (user.getIsDeleted() == 2) {
                 return ApiResultHandler.buildApiResult(401,"账号已注册，正在等待审核",null);
-            }
-            else {
+            } else {
                 return ApiResultHandler.buildApiResult(404,"账号或密码错误",null);
             }
-        }catch (Exception e){
-            return ApiResultHandler.buildApiResult(404,"登录失败",null);
-        }
     }
 
     /**
-     * @Description: 用户注册
+     * @Description: 用户注册 -需上锁防止personId对应错误
      * @param user
      * @return ApiResult
      **/
     @PostMapping("/register")
-    public ApiResult register(@RequestBody User user) throws ParseException {
-
+    public synchronized ApiResult register(User user) throws ParseException {
+        System.out.println(user);
         //返回注入结果
         String result = userService.register(user);
         if (result.equals(ServiceResultEnum.SUCCESS.getResult())){
+            personBasicInfoService.insertSelective(new PersonBasicInfo());
+            requirementService.insert(new Requirement());
+            personDetailInfoService.insert(new PersonDetailInfo());
             return ApiResultHandler.success();
         }
         if (result.equals(ServiceResultEnum.USER_IS_EXIST.getResult())){

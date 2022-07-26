@@ -56,9 +56,9 @@
             parameterType="com.personInfo.bean.Requirement">
         insert into `tb_disable_date_requirements`
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="personId != null">
-                person_id,
-            </if>
+<!--            <if test="personId != null">-->
+<!--                person_id,-->
+<!--            </if>-->
             <if test="ageRange != null">
                 age_range,
             </if>
@@ -85,9 +85,9 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="personId != null">
-                #{personId,jdbcType=INTEGER},
-            </if>
+<!--            <if test="personId != null">-->
+<!--                #{personId,jdbcType=INTEGER},-->
+<!--            </if>-->
             <if test="ageRange != null">
                 #{ageRange,jdbcType=VARCHAR},
             </if>

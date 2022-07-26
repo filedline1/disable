@@ -5,6 +5,7 @@ import com.personInfo.bean.PersonBasicInfo;
 import com.personInfo.bean.PersonDetailInfo;
 import com.personInfo.mapper.PersonBasicInfoMapper;
 import com.personInfo.service.PersonBasicInfoService;
+import com.personInfo.util.NickNameUtil;
 import com.personInfo.util.PageQueryUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,12 @@ public class PersonBasicInfoServiceImpl implements PersonBasicInfoService {
 
     @Override
     public int insertSelective(PersonBasicInfo personBasicInfo) {
+        if (personBasicInfo.getIsVip() == null){
+            personBasicInfo.setIsVip(1);
+        }
+        if (personBasicInfo.getPersonName() == null){
+            personBasicInfo.setPersonName(NickNameUtil.generateName());
+        }
         return personBasicInfoMapper.insertSelective(personBasicInfo);
     }
 

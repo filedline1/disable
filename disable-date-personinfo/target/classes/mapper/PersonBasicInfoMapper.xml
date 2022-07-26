@@ -4,6 +4,8 @@
     <resultMap id="BaseResultMap" type="com.personInfo.bean.PersonBasicInfo">
         <id column="person_id" jdbcType="INTEGER" property="personId"/>
         <result column="person_name" jdbcType="VARCHAR" property="personName"/>
+        <result column="is_vip" jdbcType="TINYINT" property="isVip"/>
+        <result column="sorts" jdbcType="INTEGER" property="sorts"/>
         <result column="sex" jdbcType="INTEGER" property="sex"/>
         <result column="age" jdbcType="INTEGER" property="age"/>
         <result column="phone" jdbcType="VARCHAR" property="phone"/>
@@ -30,7 +32,7 @@
         <result column="email" jdbcType="VARCHAR" property="email"/>
     </resultMap>
     <sql id="Base_Column_List">
-        person_id, person_name, sex, age, phone, image_path, disable_number, work_addr, household_addr,
+        person_id, person_name,is_vip,sorts, sex, age, phone, image_path, disable_number, work_addr, household_addr,
         marital_status, height, weight, degree, income, occupation, housing_status, car_status,
         expected_marry_time, person_intro, longitude, latitude, wechat, wechat_code_images_path, qq, email
     </sql>
@@ -52,10 +54,11 @@
 
     <insert id="insert" parameterType="com.personInfo.bean.PersonBasicInfo">
     insert into `tb_disable_date_person_basic_info`
-        (person_id, person_name, sex, age, phone, image_path, disable_number, work_addr, household_addr,
+        (person_id, person_name,is_vip,sorts, sex, age, phone, image_path, disable_number, work_addr, household_addr,
         marital_status, height, weight, degree, income, occupation, housing_status, car_status,
         expected_marry_time, person_intro, longitude, latitude, wechat, wechat_code_images_path, qq, email)
-    values (#{personId,jdbcType=INTEGER}, #{personName,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER},
+    values (#{personId,jdbcType=INTEGER}, #{personName,jdbcType=VARCHAR},
+            #{isVip,jdbcType=TINYINT},#{sorts,jdbcType=INTEGER},#{sex,jdbcType=INTEGER},
             #{age,jdbcType=INTEGER},#{phone,jdbcType=VARCHAR},#{imagePath,jdbcType=VARCHAR},
             #{disableNumber,jdbcType=VARCHAR},#{workAddr,jdbcType=VARCHAR},#{householdAddr,jdbcType=VARCHAR},
             #{maritalStatus,jdbcType=VARCHAR},#{height,jdbcType=INTEGER},#{weight,jdbcType=VARCHAR},
@@ -67,13 +70,14 @@
     </insert>
 
     <insert id="insertBatch" parameterType="com.personInfo.bean.PersonBasicInfo">
-        insert into `tb_disable_date_person_basic_info` ( person_id, person_name, sex, age, phone, image_path, disable_number, work_addr, household_addr,
+        insert into `tb_disable_date_person_basic_info` ( person_id, person_name, is_vip, sorts,sex, age, phone, image_path, disable_number, work_addr, household_addr,
         marital_status, height, weight, degree, income, occupation, housing_status, car_status,
         expected_marry_time, person_intro, longitude, latitude, wechat, wechat_code_images_path, qq, email)
         values
         <foreach collection="recordItems" item="recordItem" separator=",">
             (
-                #{recordItem.personId,jdbcType=INTEGER}, #{recordItem.personName,jdbcType=VARCHAR}, #{recordItem.sex,jdbcType=INTEGER},
+                #{recordItem.personId,jdbcType=INTEGER}, #{recordItem.personName,jdbcType=VARCHAR},
+                #{recordItem.isVip,jdbcType=TINYINT},#{recordItem.sorts,jdbcType=INTEGER},#{recordItem.sex,jdbcType=INTEGER},
                 #{recordItem.age,jdbcType=INTEGER},#{recordItem.phone,jdbcType=VARCHAR},#{recordItem.imagePath,jdbcType=VARCHAR},
                 #{recordItem.disableNumber,jdbcType=VARCHAR},#{recordItem.workAddr,jdbcType=VARCHAR},#{recordItem.householdAddr,jdbcType=VARCHAR},
                 #{recordItem.maritalStatus,jdbcType=VARCHAR},#{recordItem.height,jdbcType=INTEGER},#{recordItem.weight,jdbcType=VARCHAR},
@@ -86,17 +90,21 @@
         </foreach>
     </insert>
 
-
-
     <insert id="insertSelective" useGeneratedKeys="true" keyProperty="personId"
             parameterType="com.personInfo.bean.PersonBasicInfo">
         insert into `tb_disable_date_person_basic_info`
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="personId != null">
-                person_id,
-            </if>
+<!--            <if test="personId != null">-->
+<!--                person_id,-->
+<!--            </if>-->
             <if test="personName != null">
                 person_name,
+            </if>
+            <if test="isVip != null">
+                is_vip,
+            </if>
+            <if test="sorts != null">
+                sorts,
             </if>
             <if test="sex != null">
                 sex,
@@ -170,11 +178,17 @@
         </trim>
 
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="personId != null">
-                #{personId,jdbcType=INTEGER},
-            </if>
+<!--            <if test="personId != null">-->
+<!--                #{personId,jdbcType=INTEGER},-->
+<!--            </if>-->
             <if test="personName != null">
                 #{personName,jdbcType=VARCHAR},
+            </if>
+            <if test="isVip != null">
+                #{isVip,jdbcType=TINYINT},
+            </if>
+            <if test="sorts != null">
+                #{sorts,jdbcType=INTEGER},
             </if>
             <if test="sex != null">
                 #{sex,jdbcType=INTEGER},
@@ -261,6 +275,12 @@
             <if test="personName != null">
                 person_name = #{personName,jdbcType=VARCHAR},
             </if>
+            <if test="isVip != null">
+                is_vip = #{isVip,jdbcType=TINYINT},
+            </if>
+            <if test="sorts != null">
+                sorts = #{sorts,jdbcType=INTEGER},
+            </if>
             <if test="sex != null">
                 sex = #{sex,jdbcType=INTEGER},
             </if>
@@ -337,6 +357,8 @@
     update `tb_disable_date_person_basic_info`
     set
         person_name = #{personName,jdbcType=VARCHAR},
+        is_vip = #{isVip,jdbcType=TINYINT},
+        sorts = #{sorts,jdbcType=INTEGER},
         sex = #{sex,jdbcType=INTEGER},
         age = #{age,jdbcType=INTEGER},
         phone = #{phone,jdbcType=VARCHAR},

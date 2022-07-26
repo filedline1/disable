@@ -18,7 +18,7 @@ public class User {
 
     String passwordMd5;
 
-    Integer isDeteled;
+    Integer isDeleted;
 
     Integer lockedFlag;
 
@@ -28,12 +28,12 @@ public class User {
     public User() {
     }
 
-    public User(Integer userId, String nickName, String loginName, String passwordMd5, Integer isDeteled, Integer lockedFlag, Date createTime) {
+    public User(Integer userId, String nickName, String loginName, String passwordMd5, Integer isDeleted, Integer lockedFlag, Date createTime) {
         this.userId = userId;
         this.nickName = nickName;
         this.loginName = loginName;
         this.passwordMd5 = passwordMd5;
-        this.isDeteled = isDeteled;
+        this.isDeleted = isDeleted;
         this.lockedFlag = lockedFlag;
         this.createTime = createTime;
     }
@@ -70,12 +70,12 @@ public class User {
         this.passwordMd5 = passwordMd5;
     }
 
-    public Integer getIsDeteled() {
-        return isDeteled;
+    public Integer getIsDeleted() {
+        return isDeleted;
     }
 
-    public void setIsDeteled(Integer isDeteled) {
-        this.isDeteled = isDeteled;
+    public void setIsDeleted(Integer isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
     public Integer getLockedFlag() {
@@ -101,7 +101,7 @@ public class User {
                 ", nickName='" + nickName + '\'' +
                 ", loginName='" + loginName + '\'' +
                 ", passwordMd5='" + passwordMd5 + '\'' +
-                ", isDeteled=" + isDeteled +
+                ", isDeleted=" + isDeleted +
                 ", lockedFlag=" + lockedFlag +
                 ", createTime=" + createTime +
                 '}';

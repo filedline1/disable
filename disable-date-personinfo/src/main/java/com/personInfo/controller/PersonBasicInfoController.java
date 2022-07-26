@@ -54,11 +54,12 @@ public class PersonBasicInfoController {
         if (personBasicInfo.getPersonId() == null) {
             return ResultGenerator.genFailResult("参数异常！");
         }
+        System.out.println(personBasicInfo);
         int i = personBasicInfoService.updateByPrimaryKeySelective(personBasicInfo);
         if (i > 0){
             return ResultGenerator.genSuccessResult();
         } else {
-            return ResultGenerator.genFailResult("更新择偶要求信息失败");
+            return ResultGenerator.genFailResult("更新个人基本信息失败");
         }
     }
 
@@ -129,8 +130,8 @@ public class PersonBasicInfoController {
      */
     @RequestMapping(value = "/personBasicInfo/delete", method = RequestMethod.DELETE)
     @ResponseBody
-    public Result delete(Integer id){
-        int deleteBatch = personBasicInfoService.delete(id);
+    public Result delete(Integer personId){
+        int deleteBatch = personBasicInfoService.delete(personId);
         if (deleteBatch > 0){
             return ResultGenerator.genSuccessResult("删除成功");
         }

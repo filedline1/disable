@@ -6,14 +6,14 @@
         <result column="nick_name" jdbcType="VARCHAR" property="nickName"/>
         <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
         <result column="password_md5" jdbcType="VARCHAR" property="passwordMd5"/>
-        <result column="is_deteled" jdbcType="TINYINT" property="isDeteled"/>
+        <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
         <result column="locked_flag" jdbcType="TINYINT" property="lockedFlag"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        user_id, nick_name, login_name, password_md5, is_deteled, locked_flag, create_time
+        user_id, nick_name, login_name, password_md5, is_deleted, locked_flag, create_time
     </sql>
-    <select id="selectUserByLoginName" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="selectUserByLoginName" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from `tb_disable_date_user`
@@ -28,12 +28,58 @@
         where nick_name = #{nickName,jdbcType=VARCHAR}
     </select>
 
-    <insert id="insertUser" parameterType="com.personInfo.bean.User">
-    insert into `tb_disable_date_user` ( user_id, nick_name, login_name, password_md5, is_deteled, locked_flag, create_time)
-    values (#{userId,jdbcType=INTEGER}, #{nickName,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR},
-            #{passwordMd5,jdbcType=VARCHAR},#{is_deteled,jdbcType=INTEGER},#{lockedFlag,jdbcType=INTEGER},
-            #{createTime,jdbcType=TIMESTAMP}
-      )
+<!--    <insert id="insertUser" parameterType="com.personInfo.bean.User">-->
+<!--    insert into `tb_disable_date_user` ( user_id, nick_name, login_name, password_md5, is_deteled, locked_flag, create_time)-->
+<!--    values (#{userId,jdbcType=INTEGER}, #{nickName,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR},-->
+<!--            #{passwordMd5,jdbcType=VARCHAR},#{isDeteled,jdbcType=INTEGER},#{lockedFlag,jdbcType=INTEGER},-->
+<!--            #{createTime,jdbcType=TIMESTAMP}-->
+<!--      )-->
+<!--    </insert>-->
+
+
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="userId"
+            parameterType="com.personInfo.bean.User">
+        insert into `tb_disable_date_user`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="nickName != null">
+                nick_name,
+            </if>
+            <if test="loginName != null">
+                login_name,
+            </if>
+            <if test="passwordMd5 != null">
+                password_md5,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+            <if test="lockedFlag != null">
+                locked_flag,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="nickName != null">
+                #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="loginName != null">
+                #{loginName,jdbcType=VARCHAR},
+            </if>
+            <if test="passwordMd5 != null">
+                #{passwordMd5,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=INTEGER},
+            </if>
+            <if test="lockedFlag != null">
+                #{lockedFlag,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
     </insert>
 
 

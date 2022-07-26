@@ -26,7 +26,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="disable-date-admin" options="-parameters" />
+      <module name="disable-date-admin" options="" />
       <module name="disable-date-message" options="" />
       <module name="disable-date-personinfo" options="-parameters" />
       <module name="disable-date-relation" options="-parameters" />

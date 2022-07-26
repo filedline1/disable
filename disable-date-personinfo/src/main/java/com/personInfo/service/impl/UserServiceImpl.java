@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
         user.setCreateTime(new Date());
         //账号初始状态设置为锁定和未认证
         user.setLockedFlag(1);
-        user.setIsDeteled(2);
+        user.setIsDeleted(2);
         if (userMapper.insertUser(user) > 0){
             return ServiceResultEnum.SUCCESS.getResult();
         }

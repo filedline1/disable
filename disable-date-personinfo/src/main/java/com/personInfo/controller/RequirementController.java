@@ -73,7 +73,7 @@ public class RequirementController {
     @ResponseBody
     public Result insertInfo(Requirement requirement){
         System.out.println(requirement);
-        int insert = requirementService.insert(requirement);
+        int insert = requirementService.insertSelective(requirement);
         if (insert > 0){
             return ResultGenerator.genSuccessResult();
         } else {
