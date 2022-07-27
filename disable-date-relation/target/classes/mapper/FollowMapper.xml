@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.relation.mapper.FollowMapper">
+    <resultMap id="BaseResultMap" type="com.relation.bean.Follow">
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="followed_user_id" jdbcType="BIGINT" property="followedUserId"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        user_id, followed_user_id, status, create_time, update_time
+    </sql>
+
+    <select id="selectAttentionByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT * FROM
+        `tb_disable_date_follow` where user_id = #{userId}
+        <if test="start!=null and limit!=null">
+            LIMIT #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="selectStatusBetweenTwoUser" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select * from `tb_disable_date_fans` where
+            (user_id = #{firstUserId} and follower = #{secondUserId})
+                                                or (user_id = #{secondUserId} and follower = #{firstUserId})
+    </select>
+
+    <select id="selectAttentionCountByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT count(*) FROM
+        `tb_disable_date_follow` where (user_id = #{userId} and status = 2)
+    </select>
+
+    <select id="selectAttentionStatus" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT count(*) FROM
+            `tb_disable_date_follow` where (user_id = #{userId} and followed_user_id = #{followedUserId} and status = 2)
+    </select>
+
+    <update id="addAttention" parameterType="com.relation.bean.Follow">
+        update `tb_disable_date_follow`
+        set
+            status = 2,
+            update_time = now()
+        where user_id = #{userId,jdbcType=BIGINT} and followed_user_id = #{followedUserId,jdbcType=BIGINT}
+    </update>
+
+    <update id="cancelAttention" parameterType="com.relation.bean.Follow">
+        update `tb_disable_date_follow`
+        set
+            status = 1,
+            update_time = now()
+        where user_id = #{userId,jdbcType=BIGINT} and followed_user_id = #{followedUserId,jdbcType=BIGINT}
+    </update>
+
+    <insert id="insertAttentionRecord" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.relation.bean.Follow">
+        insert into `tb_disable_date_follow`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="followedUserId != null">
+                followed_user_id,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="followedUserId != null">
+                #{followedUserId,jdbcType=BIGINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+
+    <delete id="deleteRecord" parameterType="java.lang.Integer">
+        delete from `tb_disable_date_follow` where user_id = #{userId,jdbcType=BIGINT} or followed_user_id = #{followedUserId,jdbcType=BIGINT}
+    </delete>
+
+</mapper>
