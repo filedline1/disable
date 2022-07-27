@@ -13,6 +13,8 @@ import com.personInfo.service.UserService;
 import com.personInfo.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
@@ -60,12 +62,11 @@ public class UserController {
             if (user != null && user.getIsDeleted() == 1){
                 Map<String,String> map = new HashMap<>();
                 map.put("userId",user.getUserId().toString());
-                map.put("nickName",user.getNickName());
                 map.put("loginName",user.getLoginName());
                 map.put("passwordMd5",user.getPasswordMd5());
                 //生成令牌
                 String token = JWTUtil.getToken(map);
-                System.out.println("token:"+token);
+                System.out.println("token:" + token);
                 String user_str = JsonUtil.objToJson(user);
                 //token 与user 绑定存入redis
                 redisTemplate.opsForValue().set(token,user_str);
@@ -83,20 +84,27 @@ public class UserController {
     }
 
     /**
-     * @Description: 用户注册 -需上锁防止personId对应错误
+     * @Description: 用户注册
      * @param user
      * @return ApiResult
      **/
     @PostMapping("/register")
+    @Transactional(rollbackFor = Exception.class)
     public synchronized ApiResult register(User user) throws ParseException {
-        System.out.println(user);
+//        System.out.println(user);
         //返回注入结果
         String result = userService.register(user);
         if (result.equals(ServiceResultEnum.SUCCESS.getResult())){
-            personBasicInfoService.insertSelective(new PersonBasicInfo());
-            requirementService.insert(new Requirement());
-            personDetailInfoService.insert(new PersonDetailInfo());
-            return ApiResultHandler.success();
+            try {
+                personBasicInfoService.insertSelective(new PersonBasicInfo());
+                requirementService.insert(new Requirement());
+                personDetailInfoService.insert(new PersonDetailInfo());
+                return ApiResultHandler.success();
+            } catch (Exception e){
+                System.out.println("方法出现异常：" + e);
+                //实现手动回滚
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            }
         }
         if (result.equals(ServiceResultEnum.USER_IS_EXIST.getResult())){
             return ApiResultHandler.buildApiResult(404, ServiceResultEnum.USER_IS_EXIST.getResult(), null);
@@ -146,10 +154,15 @@ public class UserController {
 
     @PostMapping("/updateNickName")
     public ApiResult updateNickName(@RequestParam("loginName") String loginName,
-                                    @RequestParam("nickName") String nickName)
+                                    @RequestParam("nickName") String nickName,HttpServletRequest request)
             throws IOException {
-        if(userService.updateNickName(loginName,nickName).equals(ServiceResultEnum.SUCCESS.getResult())){
-            return ApiResultHandler.buildApiResult(200,"修改成功",ServiceResultEnum.SUCCESS.getResult());
+        //令牌检验
+        String token = request.getHeader("token");
+        User userFromRedis = userUtil.getUserFromRedis(token);
+        if (userFromRedis.getLoginName().equals(loginName)){
+            if(userService.updateNickName(loginName,nickName).equals(ServiceResultEnum.SUCCESS.getResult())){
+                return ApiResultHandler.buildApiResult(200,"修改成功",ServiceResultEnum.SUCCESS.getResult());
+            }
         }
         return ApiResultHandler.buildApiResult(404,"修改失败",ServiceResultEnum.ERROR.getResult());
 

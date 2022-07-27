@@ -9,6 +9,8 @@ import com.relation.mapper.FollowMapper;
 import com.relation.service.FanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.Date;
 import java.util.List;
@@ -69,26 +71,43 @@ public class FanServiceImpl implements FanService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public String addAttention(Fan fan){
         Follow follow = new Follow();
         follow.setUserId(fan.getFollower());
         follow.setFollowedUserId(fan.getUserId());
         //若存在记录那么将关注状态改为关注
         if (fanMapper.selectAttentionStatus(fan.getUserId(),fan.getFollower()) > 0){
-            fanMapper.addAttention(fan);
-            followMapper.addAttention(follow);
-            return ServiceResultEnum.SUCCESS.getResult();
+            //开启事务
+            try {
+                fanMapper.addAttention(fan);
+                followMapper.addAttention(follow);
+                //结束事务
+                return ServiceResultEnum.SUCCESS.getResult();
+            } catch (Exception e){
+                System.out.println("方法出现异常：" + e);
+                //手动实现回滚
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            }
         } else {
             //若不存在记录，那么插入关注记录
             follow.setStatus(2);
             fan.setStatus(2);
-            int i = fanMapper.insertAttentionRecord(fan);
-            int j = followMapper.insertAttentionRecord(follow);
-            if (i > 0 && j > 0){
-                return ServiceResultEnum.SUCCESS.getResult();
+            //开启事务
+            try {
+                int i = fanMapper.insertAttentionRecord(fan);
+                int j = followMapper.insertAttentionRecord(follow);
+                //结束事务
+                if (i > 0 && j > 0){
+                    return ServiceResultEnum.SUCCESS.getResult();
+                }
+            } catch (Exception e){
+                System.out.println("方法出现异常：" + e);
+                //手动实现回滚
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             }
-            return ServiceResultEnum.DB_ERROR.getResult();
         }
+        return ServiceResultEnum.DB_ERROR.getResult();
     }
 
     /**
@@ -97,26 +116,43 @@ public class FanServiceImpl implements FanService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public String cancelAttention(Fan fan){
         Follow follow = new Follow();
         follow.setUserId(fan.getFollower());
         follow.setFollowedUserId(fan.getUserId());
         //若存在记录那么将关注状态改为不关注
         if (fanMapper.selectAttentionStatus(fan.getUserId(),fan.getFollower()) > 0){
-            fanMapper.cancelAttention(fan);
-            followMapper.cancelAttention(follow);
-            return ServiceResultEnum.SUCCESS.getResult();
+            //开启事务
+            try {
+                fanMapper.cancelAttention(fan);
+                followMapper.cancelAttention(follow);
+                //结束事务
+                return ServiceResultEnum.SUCCESS.getResult();
+            } catch (Exception e) {
+                System.out.println("方法出现异常：" + e);
+                //手动实现回滚
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            }
         } else {
             //若不存在记录，那么插入关注记录
             follow.setStatus(2);
             fan.setStatus(1);
-            int i = fanMapper.insertAttentionRecord(fan);
-            int j = followMapper.insertAttentionRecord(follow);
-            if (i > 0 && j > 0){
-                return ServiceResultEnum.SUCCESS.getResult();
+            //开启事务
+            try {
+                int i = fanMapper.insertAttentionRecord(fan);
+                int j = followMapper.insertAttentionRecord(follow);
+                //结束事务
+                if (i > 0 && j > 0){
+                    return ServiceResultEnum.SUCCESS.getResult();
+                }
+            } catch (Exception e) {
+                System.out.println("方法出现异常：" + e);
+                //手动实现回滚
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             }
-            return ServiceResultEnum.DB_ERROR.getResult();
         }
+        return ServiceResultEnum.DB_ERROR.getResult();
     }
 
 
@@ -126,12 +162,21 @@ public class FanServiceImpl implements FanService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public String deleteRecord(Integer userId){
         Integer follower = userId;
-        final int i = fanMapper.deleteRecord(userId,follower);
-        final int j = followMapper.deleteRecord(userId, follower);
-        if (i > 0 && j > 0){
-            return ServiceResultEnum.SUCCESS.getResult();
+        //开启事务
+        try {
+            final int i = fanMapper.deleteRecord(userId,follower);
+            final int j = followMapper.deleteRecord(userId, follower);
+            //结束事务
+            if (i > 0 && j > 0){
+                return ServiceResultEnum.SUCCESS.getResult();
+            }
+        } catch (Exception e){
+            System.out.println("方法出现异常：" + e);
+            //手动实现回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
         return ServiceResultEnum.DB_ERROR.getResult();
     }

@@ -2,22 +2,17 @@ package com.relation.controller;
 
 
 import com.relation.bean.Fan;
+import com.relation.bean.Follow;
 import com.relation.common.ServiceResultEnum;
 import com.relation.service.FanService;
+import com.relation.service.FollowService;
 import com.relation.utils.Result;
 import com.relation.utils.ResultGenerator;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.imageio.ImageIO;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +24,9 @@ public class FanController {
 
     @Autowired
     FanService fanService;
+
+    @Autowired
+    FollowService followService;
 
     /**
      * 分页查询粉丝对象
@@ -45,6 +43,20 @@ public class FanController {
     }
 
     /**
+     * 查询该用户关注列表
+     * @param userId
+     * @param start
+     * @param limit
+     * @return
+     **/
+     @RequestMapping(value = "/searchAttention", method = RequestMethod.POST)
+     @ResponseBody
+    public List<Follow> selectAttentionByUserId(@Param("userId") Integer userId, @Param("start")Integer start, @Param("limit")Integer limit){
+         final List<Follow> follows = followService.selectAttentionByUserId(userId, start, limit);
+         return follows;
+     }
+
+    /**
      * 查找该用户的粉丝数
      * @param userId
      * @return
@@ -53,6 +65,18 @@ public class FanController {
     @ResponseBody
     public Integer selectFollowerCountByUserId(Integer userId){
         Integer count = fanService.selectFollowerCountByUserId(userId);
+        return count;
+    }
+
+    /**
+     * 查询该用户关注数量
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/searchAttentionCount", method = RequestMethod.POST)
+    @ResponseBody
+    public Integer selectAttentionCountByUserId(Integer userId){
+        Integer count = followService.selectAttentionCountByUserId(userId);
         return count;
     }
 

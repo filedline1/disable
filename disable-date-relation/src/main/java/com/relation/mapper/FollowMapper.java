@@ -58,9 +58,9 @@ public interface FollowMapper {
     /**
      * 删除该用户的所有关注信息（注销账号时使用）
      * @param userId
-     * @param followUserId
+     * @param followedUserId
      * @return
      */
-    public int deleteRecord(Integer userId,Integer followUserId);
+    public int deleteRecord(Integer userId,Integer followedUserId);
 
 }

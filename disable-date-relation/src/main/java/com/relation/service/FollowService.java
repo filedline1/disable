@@ -26,12 +26,6 @@ public interface FollowService {
     public int selectAttentionCountByUserId(Integer userId);
 
 
-    /**
-     * 删除该用户的所有关注信息（注销账号时使用）
-     * @param userId
-     * @return
-     */
-    public String deleteRecord(Integer userId);
 
 
 }

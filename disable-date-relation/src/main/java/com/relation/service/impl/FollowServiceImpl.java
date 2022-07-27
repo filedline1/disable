@@ -52,19 +52,5 @@ public class FollowServiceImpl implements FollowService {
         return count;
     }
 
-    /**
-     * 删除改用户的所有关注信息（注销账号时使用）
-     * @param userId
-     * @return
-     */
-    @Override
-    public String deleteRecord(Integer userId){
-        Integer follower = userId;
-        final int i = followMapper.deleteRecord(userId,follower);
-        if (i > 0){
-            return ServiceResultEnum.SUCCESS.getResult();
-        }
-        return ServiceResultEnum.DB_ERROR.getResult();
-    }
 
 }
