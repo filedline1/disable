@@ -2,6 +2,7 @@ package com.personInfo.controller;
 
 
 import com.personInfo.bean.PersonBasicInfo;
+import com.personInfo.common.PersonBasicInfoRestClient;
 import com.personInfo.service.PersonBasicInfoService;
 import com.personInfo.util.PageQueryUtil;
 import com.personInfo.util.Result;
@@ -27,6 +28,25 @@ public class PersonBasicInfoController {
     @Autowired
     PersonBasicInfoService personBasicInfoService;
 
+    @Autowired
+    PersonBasicInfoRestClient personBasicInfoRestClient;
+
+//    /**
+//     * 获取记录的分页列表
+//     * @param
+//     * @return
+//     */
+//    @RequestMapping(value = "/personBasicInfo/list", method = RequestMethod.GET)
+//    @ResponseBody
+//    List<PersonBasicInfo> findCommunityList(@Param("start")int start, @Param("limit")int limit){
+//        PageQueryUtil params = new PageQueryUtil(start,limit);
+//        if (StringUtils.isEmpty(params.get("page")) || StringUtils.isEmpty(params.get("limit"))) {
+//            return null;
+//        }
+//        List<PersonBasicInfo> recordList = personBasicInfoService.findRecordList(params);
+//        return recordList;
+//    }
+
     /**
      * 获取记录的分页列表
      * @param
@@ -39,7 +59,7 @@ public class PersonBasicInfoController {
         if (StringUtils.isEmpty(params.get("page")) || StringUtils.isEmpty(params.get("limit"))) {
             return null;
         }
-        List<PersonBasicInfo> recordList = personBasicInfoService.findRecordList(params);
+        List<PersonBasicInfo> recordList = personBasicInfoRestClient.findRecordListFromIndex(params);
         return recordList;
     }
 
@@ -82,34 +102,6 @@ public class PersonBasicInfoController {
     }
 
 
-    @RequestMapping(value = "/personBasicInfo/insertBatch", method = RequestMethod.POST)
-    @ResponseBody
-    public Result insertBatch(List<PersonBasicInfo> personBasicInfos){
-        int i = personBasicInfoService.insertBatch(personBasicInfos);
-        if (i > 0){
-            return ResultGenerator.genSuccessResult("批量插入成功");
-        } else {
-            return ResultGenerator.genFailResult("批量插入失败");
-        }
-    }
-
-
-    /**
-     * 选择性插入记录
-     * @param personBasicInfo 记录对象
-     * @return
-     */
-    @RequestMapping(value = "/personBasicInfo/insertSelective", method = RequestMethod.POST)
-    @ResponseBody
-    public Result insertSelective(PersonBasicInfo personBasicInfo){
-        int i = personBasicInfoService.insertSelective(personBasicInfo);
-        if (i > 0){
-            return ResultGenerator.genSuccessResult("插入信息成功");
-        } else {
-            return ResultGenerator.genFailResult("插入信息失败");
-        }
-    }
-
     /**
      * 根据personId查找Requirement对象
      * @param personId
@@ -125,7 +117,7 @@ public class PersonBasicInfoController {
 
     /**
      * 删除信息
-     * @param id
+     * @param personId
      * @return
      */
     @RequestMapping(value = "/personBasicInfo/delete", method = RequestMethod.DELETE)

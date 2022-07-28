@@ -58,7 +58,7 @@ public interface RequirementService {
     Requirement selectByPrimaryKey(Integer personId);
 
     /**
-     * 批量删除信息
+     * 删除信息
      * @param id 用户id
      * @return
      */
