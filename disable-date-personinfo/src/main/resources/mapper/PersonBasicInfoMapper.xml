@@ -43,6 +43,13 @@
         where person_id = #{personId,jdbcType=INTEGER}
     </select>
 
+    <select id="selectByPhone" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `tb_disable_date_person_basic_info`
+        where phone = #{phone,jdbcType=VARCHAR}
+    </select>
+
 
     <select id="findRecordList" parameterType="Map" resultMap="BaseResultMap">
         SELECT * FROM

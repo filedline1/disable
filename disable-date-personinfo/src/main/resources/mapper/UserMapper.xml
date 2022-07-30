@@ -28,13 +28,6 @@
         where nick_name = #{nickName,jdbcType=VARCHAR}
     </select>
 
-<!--    <insert id="insertUser" parameterType="com.personInfo.bean.User">-->
-<!--    insert into `tb_disable_date_user` ( user_id, nick_name, login_name, password_md5, is_deteled, locked_flag, create_time)-->
-<!--    values (#{userId,jdbcType=INTEGER}, #{nickName,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR},-->
-<!--            #{passwordMd5,jdbcType=VARCHAR},#{isDeteled,jdbcType=INTEGER},#{lockedFlag,jdbcType=INTEGER},-->
-<!--            #{createTime,jdbcType=TIMESTAMP}-->
-<!--      )-->
-<!--    </insert>-->
 
 
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="userId"
@@ -101,5 +94,7 @@
     <delete id="delete" parameterType="java.lang.Integer">
         delete from `tb_disable_date_user` where user_id = #{userId}
     </delete>
+
+
 
 </mapper>

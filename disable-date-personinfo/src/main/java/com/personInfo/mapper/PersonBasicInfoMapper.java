@@ -60,11 +60,18 @@ public interface PersonBasicInfoMapper {
     int insertSelective(PersonBasicInfo personBasicInfo);
 
     /**
-     * 根据recordId查找Community对象
+     * 根据recordId查找PersonBasicInfo对象
      * @param personId
      * @return
      */
     PersonBasicInfo selectByPrimaryKey(Integer personId);
+
+    /**
+     * 根据手机号查找PersonBasicInfo对象
+     * @param phone
+     * @return
+     */
+    PersonBasicInfo selectByPhone(String phone);
 
     /**
      * 删除择偶要求，账号注销时使用

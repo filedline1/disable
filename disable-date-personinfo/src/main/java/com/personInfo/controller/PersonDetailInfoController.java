@@ -2,6 +2,7 @@ package com.personInfo.controller;
 
 
 import com.personInfo.bean.PersonDetailInfo;
+import com.personInfo.common.PersonDetailInfoRestClient;
 import com.personInfo.service.PersonDetailInfoService;
 import com.personInfo.util.PageQueryUtil;
 import com.personInfo.util.Result;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
+import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
+
 /**
  * @author Mr.Jiang
  * @version 1.0
@@ -27,6 +30,9 @@ public class PersonDetailInfoController {
     @Autowired
     PersonDetailInfoService personDetailInfoService;
 
+    @Autowired
+    PersonDetailInfoRestClient personDetailInfoRestClient;
+
     /**
      * 获取记录的分页列表
      * @param
@@ -34,13 +40,17 @@ public class PersonDetailInfoController {
      */
     @RequestMapping(value = "/personDetailInfo/list", method = RequestMethod.GET)
     @ResponseBody
-    List<PersonDetailInfo> findCommunityList(@Param("start")int start, @Param("limit")int limit){
+    Result findCommunityList(@Param("start")int start, @Param("limit")int limit){
         PageQueryUtil params = new PageQueryUtil(start,limit);
         if (StringUtils.isEmpty(params.get("page")) || StringUtils.isEmpty(params.get("limit"))) {
-            return null;
+            return ResultGenerator.genErrorResult(400,"参数传递格式有误！");
         }
-        List<PersonDetailInfo> recordList = personDetailInfoService.findRecordList(params);
-        return recordList;
+        List<PersonDetailInfo> recordList = personDetailInfoRestClient.findRecordListFromIndex(params);
+        if (recordList == null){
+            return ResultGenerator.genSuccessResult("分页记录不存在");
+        }
+        Result result = ResultGenerator.genSuccessResult(recordList);
+        return result;
     }
 
     /**+
@@ -50,33 +60,59 @@ public class PersonDetailInfoController {
      */
     @RequestMapping(value = "/personDetailInfo/update", method = RequestMethod.PUT)
     @ResponseBody
-    public Result updateInfo(PersonDetailInfo personDetailInfo) {
+    public Result updateInfo(PersonDetailInfo personDetailInfo){
         if (personDetailInfo.getPersonId() == null) {
             return ResultGenerator.genFailResult("参数异常！");
         }
-        int i = personDetailInfoService.updateByPrimaryKeySelective(personDetailInfo);
-        if (i > 0){
-            return ResultGenerator.genSuccessResult();
+        System.out.println(personDetailInfo);
+        int updateDB = personDetailInfoService.updateByPrimaryKeySelective(personDetailInfo);
+        int updateES;
+        try {
+            updateES = personDetailInfoRestClient.InsertPersonDetailInfoToIndexByPersonId(personDetailInfo.getPersonId());
+        } catch (Exception e){
+            return ResultGenerator.genErrorResult(500,"服务器异常，用户修改失败，请及时联系管理员！");
+        }
+        if (updateDB > 0){
+            log.println("mysql成功修改personId为" + personDetailInfo.getPersonId() + "的详细信息");
+        }
+        if (updateES > 0){
+            log.println("es成功修改personId为" + personDetailInfo.getPersonId() + "的详细信息");
+        }
+        if (updateDB > 0 && updateES > 0){
+            return ResultGenerator.genSuccessResult("添加成功");
         } else {
-            return ResultGenerator.genFailResult("更新个人详细信息失败");
+            return ResultGenerator.genFailResult("添加失败");
         }
     }
 
 
     /**
-     * 插入择偶要求
+     * 插入详细
      * @param personDetailInfo
      * @return
      */
     @RequestMapping(value = "/personDetailInfo/insertInfo", method = RequestMethod.POST)
     @ResponseBody
-    public Result insertInfo(PersonDetailInfo personDetailInfo){
+    public Result insertInfo(PersonDetailInfo personDetailInfo) {
         System.out.println(personDetailInfo);
-        int insert = personDetailInfoService.insertSelective(personDetailInfo);
-        if (insert > 0){
+        int insertES;
+        int insertDB = personDetailInfoService.insert(personDetailInfo);
+        try {
+            insertES = personDetailInfoRestClient.InsertPersonDetailInfoToIndexByPersonId(personDetailInfo.getPersonId());
+        } catch (Exception e){
+            Result result = new Result(500,"服务器异常，用户新增失败，请及时联系管理员！");
+            return result;
+        }
+        if (insertDB > 0){
+            log.println("mysql成功添加personId为" + personDetailInfo.getPersonId() + "的详细信息");
+        }
+        if (insertES > 0){
+            log.println("es成功添加personId为" + personDetailInfo.getPersonId() + "的详细信息");
+        }
+        if (insertDB > 0 && insertES > 0){
             return ResultGenerator.genSuccessResult();
         } else {
-            return ResultGenerator.genFailResult("新增失败");
+            return ResultGenerator.genFailResult("添加失败");
         }
     }
 
@@ -116,25 +152,41 @@ public class PersonDetailInfoController {
      */
     @RequestMapping(value = "/personDetailInfo/personId", method = RequestMethod.GET)
     @ResponseBody
-    PersonDetailInfo selectByPrimaryKey(Integer personId){
-        PersonDetailInfo requirement = personDetailInfoService.selectByPrimaryKey(personId);
-        return requirement;
+    Result selectByPrimaryKey(Integer personId) {
+        try {
+            PersonDetailInfo personDetailInfo = personDetailInfoRestClient.MatchByPersonId(personId);
+            if (personDetailInfo == null){
+                return ResultGenerator.genSuccessResult("查询的用户信息不存在");
+            }
+            Result result = ResultGenerator.genSuccessResult(personDetailInfo);
+            return result;
+        } catch (Exception e){
+            return ResultGenerator.genErrorResult(500,"查询用户不存在或者系统异常，请及时联系管理员");
+        }
     }
 
 
     /**
      * 删除信息
-     * @param id
+     * @param personId
      * @return
      */
     @RequestMapping(value = "/personDetailInfo/delete", method = RequestMethod.DELETE)
     @ResponseBody
     public Result delete(Integer personId){
-        int deleteBatch = personDetailInfoService.delete(personId);
-        if (deleteBatch > 0){
-            return ResultGenerator.genSuccessResult("删除成功");
+        int deleteDB = personDetailInfoService.delete(personId);
+        int deleteES = personDetailInfoRestClient.deletePersonBasicInfoFromIndexById(personId);
+        if (deleteDB > 0){
+            log.println("mysql成功删除personId为" + personId + "的详细信息");
         }
-        return ResultGenerator.genFailResult("删除失败");
+        if (deleteES > 0){
+            log.println("es成功删除personId为" + personId + "的详细信息");
+        }
+        if (deleteDB > 0 && deleteES > 0){
+            return ResultGenerator.genSuccessResult();
+        } else {
+            return ResultGenerator.genFailResult("删除失败");
+        }
     }
 
 

@@ -65,6 +65,11 @@ public class PersonBasicInfoServiceImpl implements PersonBasicInfoService {
     }
 
     @Override
+    public PersonBasicInfo selectByPhone(String phone) {
+        return personBasicInfoMapper.selectByPhone(phone);
+    }
+
+    @Override
     public int delete(Integer id) {
         return personBasicInfoMapper.delete(id);
     }

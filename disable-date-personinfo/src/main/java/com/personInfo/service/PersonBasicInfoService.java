@@ -58,6 +58,14 @@ public interface PersonBasicInfoService {
      */
     PersonBasicInfo selectByPrimaryKey(Integer personId);
 
+
+    /**
+     * 根据phone查找PersonBasicInfo对象
+     * @param phone
+     * @return
+     */
+    PersonBasicInfo selectByPhone(String phone);
+
     /**
      * 删除信息
      * @param id 用户id
