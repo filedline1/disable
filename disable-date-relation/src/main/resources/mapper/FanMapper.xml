@@ -12,6 +12,13 @@
         user_id, follower, status, create_time, update_time
     </sql>
 
+    <select id="selectFanById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT * FROM
+        `tb_disable_date_fans` where id = #{id}
+    </select>
+
+    selectFanById
+
     <select id="selectFollowerByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         SELECT * FROM
         `tb_disable_date_fans` where user_id = #{userId}

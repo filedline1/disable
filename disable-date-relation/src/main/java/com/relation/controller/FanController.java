@@ -3,9 +3,12 @@ package com.relation.controller;
 
 import com.relation.bean.Fan;
 import com.relation.bean.Follow;
+import com.relation.common.FanRestClient;
+import com.relation.common.FollowRestClient;
 import com.relation.common.ServiceResultEnum;
 import com.relation.service.FanService;
 import com.relation.service.FollowService;
+import com.relation.utils.PageQueryUtil;
 import com.relation.utils.Result;
 import com.relation.utils.ResultGenerator;
 import org.apache.ibatis.annotations.Param;
@@ -28,6 +31,12 @@ public class FanController {
     @Autowired
     FollowService followService;
 
+    @Autowired
+    FanRestClient fanRestClient;
+
+    @Autowired
+    FollowRestClient followRestClient;
+
     /**
      * 分页查询粉丝对象
      * @param userId
@@ -37,9 +46,13 @@ public class FanController {
      */
     @RequestMapping(value = "/searchFan", method = RequestMethod.POST)
     @ResponseBody
-    public List<Fan> selectFollowerByUserId(Integer userId, Integer start, Integer limit){
-        List<Fan> fans = fanService.selectFollowerByUserId(userId, start, limit);
-        return fans;
+    public Result selectFollowerByUserId(@Param("userId")Integer userId,@Param("start")Integer start,@Param("limit")Integer limit){
+        if (limit == null || start == null) {
+            return ResultGenerator.genErrorResult(400,"参数传递格式有误！");
+        }
+        PageQueryUtil params = new PageQueryUtil(start, limit);
+        List<Fan> fans = fanRestClient.findRecordListFromIndex(params);
+        return ResultGenerator.genSuccessResult(fans);
     }
 
     /**
@@ -51,9 +64,13 @@ public class FanController {
      **/
      @RequestMapping(value = "/searchAttention", method = RequestMethod.POST)
      @ResponseBody
-    public List<Follow> selectAttentionByUserId(@Param("userId") Integer userId, @Param("start")Integer start, @Param("limit")Integer limit){
-         final List<Follow> follows = followService.selectAttentionByUserId(userId, start, limit);
-         return follows;
+    public Result selectAttentionByUserId(@Param("userId") Integer userId, @Param("start")Integer start, @Param("limit")Integer limit){
+         if (limit == null || start == null) {
+             return ResultGenerator.genErrorResult(400,"参数传递格式有误！");
+         }
+         PageQueryUtil params = new PageQueryUtil(start, limit);
+         List<Follow> follows = followRestClient.findRecordListFromIndex(params);
+         return ResultGenerator.genSuccessResult(follows);
      }
 
     /**

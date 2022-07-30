@@ -7,6 +7,9 @@ import java.util.List;
 
 public interface FanService {
 
+
+
+
     /**
      * 分页查询粉丝对象
      * @param userId
@@ -22,6 +25,8 @@ public interface FanService {
      * @return
      */
     public int selectFollowerCountByUserId(Integer userId);
+
+    public Fan selectFanById(Integer id);
 
     /**
      * 查询两个人之间的关注情况

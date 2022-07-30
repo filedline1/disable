@@ -12,6 +12,11 @@
         user_id, followed_user_id, status, create_time, update_time
     </sql>
 
+    <select id="selectFollowById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT * FROM
+        `tb_disable_date_follow` where id = #{id}
+    </select>
+
     <select id="selectAttentionByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         SELECT * FROM
         `tb_disable_date_follow` where user_id = #{userId}

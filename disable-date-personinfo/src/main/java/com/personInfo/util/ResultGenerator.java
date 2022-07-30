@@ -23,6 +23,14 @@ public class ResultGenerator {
         return result;
     }
 
+    public static Result genResult(int code,String message,Object data) {
+        Result result = new Result();
+        result.setResultCode(code);
+        result.setMessage(message);
+        result.setData(data);
+        return result;
+    }
+
     public static Result genSuccessResult(Object data) {
         Result result = new Result();
         result.setResultCode(RESULT_CODE_SUCCESS);

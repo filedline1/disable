@@ -43,6 +43,16 @@ public class FanServiceImpl implements FanService {
     }
 
     /**
+     * 根据id查找关注记录
+     * @param id
+     * @return
+     */
+    public Fan selectFanById(Integer id){
+        final Fan fan = fanMapper.selectFanById(id);
+        return fan;
+    }
+
+    /**
      * 查找该用户的粉丝数
      * @param userId
      * @return

@@ -41,6 +41,12 @@ public class FollowServiceImpl implements FollowService {
         return follows;
     }
 
+
+    public Follow selectFollowById(Integer id){
+        final Follow follow = followMapper.selectFollowById(id);
+        return follow;
+    }
+
     /**
      * 查询该用户关注数量
      * @param userId

@@ -26,7 +26,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -56,7 +55,7 @@ public class UserController {
     private static String rightCode;
 
     @PostMapping("/login")
-    public ApiResult login(@RequestParam("loginName") String loginName, @RequestParam("password")String password) throws Exception{
+    public Result login(@RequestParam("loginName") String loginName, @RequestParam("password")String password) throws Exception{
             User user = userService.login(loginName, password);
             System.out.println(user);
             if (user != null && user.getIsDeleted() == 1){
@@ -75,11 +74,11 @@ public class UserController {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("token",token);
                 jsonObject.put("user",userVO);
-                return ApiResultHandler.buildApiResult(200,"登录成功",jsonObject);
+                return ResultGenerator.genResult(200,"登录成功",jsonObject);
             }else if (user.getIsDeleted() == 2) {
-                return ApiResultHandler.buildApiResult(401,"账号已注册，正在等待审核",null);
+                return ResultGenerator.genResult(401,"账号已注册，正在等待审核",null);
             } else {
-                return ApiResultHandler.buildApiResult(404,"账号或密码错误",null);
+                return ResultGenerator.genResult(404,"账号或密码错误",null);
             }
     }
 
@@ -90,7 +89,7 @@ public class UserController {
      **/
     @PostMapping("/register")
     @Transactional(rollbackFor = Exception.class)
-    public synchronized ApiResult register(User user) throws ParseException {
+    public synchronized Result register(User user) throws ParseException {
 //        System.out.println(user);
         //返回注入结果
         String result = userService.register(user);
@@ -99,7 +98,7 @@ public class UserController {
                 personBasicInfoService.insertSelective(new PersonBasicInfo());
                 requirementService.insert(new Requirement());
                 personDetailInfoService.insert(new PersonDetailInfo());
-                return ApiResultHandler.success();
+                return ResultGenerator.genSuccessResult("注册成功");
             } catch (Exception e){
                 System.out.println("方法出现异常：" + e);
                 //实现手动回滚
@@ -107,9 +106,9 @@ public class UserController {
             }
         }
         if (result.equals(ServiceResultEnum.USER_IS_EXIST.getResult())){
-            return ApiResultHandler.buildApiResult(404, ServiceResultEnum.USER_IS_EXIST.getResult(), null);
+            return ResultGenerator.genResult(404, ServiceResultEnum.USER_IS_EXIST.getResult(), null);
         }
-        return ApiResultHandler.buildApiResult(404, ServiceResultEnum.ERROR.getResult(),result);
+        return ResultGenerator.genResult(404, ServiceResultEnum.ERROR.getResult(),result);
     }
 
     @GetMapping("/showCode")
@@ -141,19 +140,19 @@ public class UserController {
     }
 
     @PostMapping("/updatePassword")
-    public ApiResult updatePassword(@RequestParam("loginName") String loginName,
+    public Result updatePassword(@RequestParam("loginName") String loginName,
                                     @RequestParam("oldPassword") String oldPassword,
                                     @RequestParam("newPassword") String newPassword)
             throws IOException {
         if(userService.updatePassword(loginName,oldPassword,newPassword).equals(ServiceResultEnum.SUCCESS.getResult())){
-            return ApiResultHandler.buildApiResult(200,"修改成功",ServiceResultEnum.SUCCESS.getResult());
+            return ResultGenerator.genResult(200,"修改成功",ServiceResultEnum.SUCCESS.getResult());
         }
-        return ApiResultHandler.buildApiResult(404,"修改失败",ServiceResultEnum.ERROR.getResult());
+        return ResultGenerator.genResult(404,"修改失败",ServiceResultEnum.ERROR.getResult());
 
     }
 
     @PostMapping("/updateNickName")
-    public ApiResult updateNickName(@RequestParam("loginName") String loginName,
+    public Result updateNickName(@RequestParam("loginName") String loginName,
                                     @RequestParam("nickName") String nickName,HttpServletRequest request)
             throws IOException {
         //令牌检验
@@ -161,10 +160,10 @@ public class UserController {
         User userFromRedis = userUtil.getUserFromRedis(token);
         if (userFromRedis.getLoginName().equals(loginName)){
             if(userService.updateNickName(loginName,nickName).equals(ServiceResultEnum.SUCCESS.getResult())){
-                return ApiResultHandler.buildApiResult(200,"修改成功",ServiceResultEnum.SUCCESS.getResult());
+                return ResultGenerator.genResult(200,"修改成功",ServiceResultEnum.SUCCESS.getResult());
             }
         }
-        return ApiResultHandler.buildApiResult(404,"修改失败",ServiceResultEnum.ERROR.getResult());
+        return ResultGenerator.genResult(404,"修改失败",ServiceResultEnum.ERROR.getResult());
 
     }
 

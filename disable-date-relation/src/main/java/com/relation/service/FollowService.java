@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface FollowService {
 
+    public Follow selectFollowById(Integer id);
+
     /**
      * 查询用户关注列表
      * @param userId

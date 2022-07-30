@@ -1,5 +1,6 @@
 package com.relation.mapper;
 
+import com.relation.bean.Fan;
 import com.relation.bean.Follow;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -9,6 +10,8 @@ import java.util.List;
 
 @Mapper
 public interface FollowMapper {
+
+    public Follow selectFollowById(Integer id);
 
     /**
      * 查询用户关注列表

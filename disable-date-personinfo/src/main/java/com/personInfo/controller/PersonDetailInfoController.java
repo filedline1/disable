@@ -8,6 +8,7 @@ import com.personInfo.util.PageQueryUtil;
 import com.personInfo.util.Result;
 import com.personInfo.util.ResultGenerator;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
+
+import static com.personInfo.constants.MqConstants.*;
 
 /**
  * @author Mr.Jiang
@@ -32,6 +35,9 @@ public class PersonDetailInfoController {
 
     @Autowired
     PersonDetailInfoRestClient personDetailInfoRestClient;
+
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
     /**
      * 获取记录的分页列表
@@ -64,30 +70,21 @@ public class PersonDetailInfoController {
         if (personDetailInfo.getPersonId() == null) {
             return ResultGenerator.genFailResult("参数异常！");
         }
-        System.out.println(personDetailInfo);
         int updateDB = personDetailInfoService.updateByPrimaryKeySelective(personDetailInfo);
-        int updateES;
-        try {
-            updateES = personDetailInfoRestClient.InsertPersonDetailInfoToIndexByPersonId(personDetailInfo.getPersonId());
-        } catch (Exception e){
-            return ResultGenerator.genErrorResult(500,"服务器异常，用户修改失败，请及时联系管理员！");
-        }
+        rabbitTemplate.convertAndSend(PERSON_DETAIL_INFO_EXCHANGE,PERSON_DETAIL_INFO_INSERT_KEY,personDetailInfo.getPersonId());
         if (updateDB > 0){
             log.println("mysql成功修改personId为" + personDetailInfo.getPersonId() + "的详细信息");
         }
-        if (updateES > 0){
-            log.println("es成功修改personId为" + personDetailInfo.getPersonId() + "的详细信息");
-        }
-        if (updateDB > 0 && updateES > 0){
-            return ResultGenerator.genSuccessResult("添加成功");
+        if (updateDB > 0){
+            return ResultGenerator.genSuccessResult("修改成功");
         } else {
-            return ResultGenerator.genFailResult("添加失败");
+            return ResultGenerator.genFailResult("修改失败");
         }
     }
 
 
     /**
-     * 插入详细
+     * 异步插入详细信息
      * @param personDetailInfo
      * @return
      */
@@ -95,21 +92,12 @@ public class PersonDetailInfoController {
     @ResponseBody
     public Result insertInfo(PersonDetailInfo personDetailInfo) {
         System.out.println(personDetailInfo);
-        int insertES;
-        int insertDB = personDetailInfoService.insert(personDetailInfo);
-        try {
-            insertES = personDetailInfoRestClient.InsertPersonDetailInfoToIndexByPersonId(personDetailInfo.getPersonId());
-        } catch (Exception e){
-            Result result = new Result(500,"服务器异常，用户新增失败，请及时联系管理员！");
-            return result;
-        }
+        int insertDB = personDetailInfoService.insertSelective(personDetailInfo);
+        rabbitTemplate.convertAndSend(PERSON_DETAIL_INFO_EXCHANGE,PERSON_DETAIL_INFO_INSERT_KEY,personDetailInfo.getPersonId());
         if (insertDB > 0){
             log.println("mysql成功添加personId为" + personDetailInfo.getPersonId() + "的详细信息");
         }
-        if (insertES > 0){
-            log.println("es成功添加personId为" + personDetailInfo.getPersonId() + "的详细信息");
-        }
-        if (insertDB > 0 && insertES > 0){
+        if (insertDB > 0){
             return ResultGenerator.genSuccessResult();
         } else {
             return ResultGenerator.genFailResult("添加失败");
@@ -175,14 +163,11 @@ public class PersonDetailInfoController {
     @ResponseBody
     public Result delete(Integer personId){
         int deleteDB = personDetailInfoService.delete(personId);
-        int deleteES = personDetailInfoRestClient.deletePersonBasicInfoFromIndexById(personId);
+        rabbitTemplate.convertAndSend(PERSON_DETAIL_INFO_EXCHANGE,PERSON_DETAIL_INFO_DELETE_KEY,personId);
         if (deleteDB > 0){
             log.println("mysql成功删除personId为" + personId + "的详细信息");
         }
-        if (deleteES > 0){
-            log.println("es成功删除personId为" + personId + "的详细信息");
-        }
-        if (deleteDB > 0 && deleteES > 0){
+        if (deleteDB > 0){
             return ResultGenerator.genSuccessResult();
         } else {
             return ResultGenerator.genFailResult("删除失败");

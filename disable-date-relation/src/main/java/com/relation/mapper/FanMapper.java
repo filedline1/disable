@@ -10,6 +10,8 @@ import java.util.List;
 @Mapper
 public interface FanMapper {
 
+    public Fan selectFanById(Integer id);
+
     public List<Fan> selectFollowerByUserId(@Param("userId") Integer userId,@Param("start")Integer start,@Param("limit")Integer limit);
 
     public int selectFollowerCountByUserId(Integer userId);
