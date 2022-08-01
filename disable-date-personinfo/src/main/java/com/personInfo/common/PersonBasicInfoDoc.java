@@ -18,19 +18,11 @@ public class PersonBasicInfoDoc {
 
     private String personName;
 
-    private Integer isVip;
-
-    private Integer sorts;
-
     private Integer sex;
 
     private Integer age;
 
     private String phone;
-
-    private String imagePath;
-
-    private String disableNumber;
 
     private String workAddr;
 
@@ -72,13 +64,9 @@ public class PersonBasicInfoDoc {
     public PersonBasicInfoDoc(PersonBasicInfo personBasicInfo) {
         this.personId = personBasicInfo.getPersonId();
         this.personName = personBasicInfo.getPersonName();
-        this.isVip = personBasicInfo.getIsVip();
-        this.sorts = personBasicInfo.getSorts();
         this.sex = personBasicInfo.getSex();
         this.age = personBasicInfo.getAge();
         this.phone = personBasicInfo.getPhone();
-        this.imagePath = personBasicInfo.getImagePath();
-        this.disableNumber = personBasicInfo.getDisableNumber();
         this.workAddr = personBasicInfo.getWorkAddr();
         this.householdAddr = personBasicInfo.getHouseholdAddr();
         this.maritalStatus = personBasicInfo.getMaritalStatus();

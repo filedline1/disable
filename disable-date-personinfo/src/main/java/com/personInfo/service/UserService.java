@@ -1,8 +1,10 @@
 package com.personInfo.service;
 
 import com.personInfo.bean.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.text.ParseException;
+import java.util.List;
 
 public interface UserService {
 
@@ -47,5 +49,35 @@ public interface UserService {
      */
     public String delete(Integer userId);
 
+    /**
+     * 签到
+     * @param reward
+     * @param loginName
+     * @return
+     */
+    public String signIn(Integer reward,String loginName);
+
+    /**
+     * 开通会员
+     * @param loginName
+     * @param month
+     * @return
+     */
+    public int openVip(String loginName,Integer month);
+
+    /**
+     * 续费会员
+     * @param loginName
+     * @param month
+     * @return
+     */
+    public int renewalVip(@Param("loginName") String loginName,@Param("month")Integer month);
+
+    /**
+     * 根据用户手机号查询用户信息
+     * @param loginName
+     * @return
+     */
+    public User selectUserByLoginName(String loginName);
 
 }

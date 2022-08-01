@@ -18,6 +18,20 @@ public class User {
 
     String passwordMd5;
 
+    Integer sex;
+
+    Integer age;
+
+    Integer isVip;
+
+    Integer sorts;
+
+    String disableNumber;
+
+    String headPicPath;
+
+    String onlineTime;
+
     Integer isDeleted;
 
     Integer lockedFlag;
@@ -25,17 +39,32 @@ public class User {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     Date createTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    Date updateTime;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    Date lastTime;
+
     public User() {
     }
 
-    public User(Integer userId, String nickName, String loginName, String passwordMd5, Integer isDeleted, Integer lockedFlag, Date createTime) {
+    public User(Integer userId, String nickName, String loginName, String passwordMd5, Integer sex, Integer age, Integer isVip, Integer sorts, String disableNumber, String headPicPath, String onlineTime, Integer isDeleted, Integer lockedFlag, Date createTime, Date updateTime, Date lastTime) {
         this.userId = userId;
         this.nickName = nickName;
         this.loginName = loginName;
         this.passwordMd5 = passwordMd5;
+        this.sex = sex;
+        this.age = age;
+        this.isVip = isVip;
+        this.sorts = sorts;
+        this.disableNumber = disableNumber;
+        this.headPicPath = headPicPath;
+        this.onlineTime = onlineTime;
         this.isDeleted = isDeleted;
         this.lockedFlag = lockedFlag;
         this.createTime = createTime;
+        this.updateTime = updateTime;
+        this.lastTime = lastTime;
     }
 
     public Integer getUserId() {
@@ -94,6 +123,78 @@ public class User {
         this.createTime = createTime;
     }
 
+    public Integer getSex() {
+        return sex;
+    }
+
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public Integer getIsVip() {
+        return isVip;
+    }
+
+    public void setIsVip(Integer isVip) {
+        this.isVip = isVip;
+    }
+
+    public Integer getSorts() {
+        return sorts;
+    }
+
+    public void setSorts(Integer sorts) {
+        this.sorts = sorts;
+    }
+
+    public String getDisableNumber() {
+        return disableNumber;
+    }
+
+    public void setDisableNumber(String disableNumber) {
+        this.disableNumber = disableNumber;
+    }
+
+    public String getHeadPicPath() {
+        return headPicPath;
+    }
+
+    public void setHeadPicPath(String headPicPath) {
+        this.headPicPath = headPicPath;
+    }
+
+    public String getOnlineTime() {
+        return onlineTime;
+    }
+
+    public void setOnlineTime(String onlineTime) {
+        this.onlineTime = onlineTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Date getLastTime() {
+        return lastTime;
+    }
+
+    public void setLastTime(Date lastTime) {
+        this.lastTime = lastTime;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -101,9 +202,18 @@ public class User {
                 ", nickName='" + nickName + '\'' +
                 ", loginName='" + loginName + '\'' +
                 ", passwordMd5='" + passwordMd5 + '\'' +
+                ", sex=" + sex +
+                ", age=" + age +
+                ", isVip=" + isVip +
+                ", sorts=" + sorts +
+                ", disableNumber='" + disableNumber + '\'' +
+                ", headPicPath='" + headPicPath + '\'' +
+                ", onlineTime='" + onlineTime + '\'' +
                 ", isDeleted=" + isDeleted +
                 ", lockedFlag=" + lockedFlag +
                 ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", lastTime=" + lastTime +
                 '}';
     }
 }

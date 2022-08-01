@@ -18,4 +18,13 @@
       sender_id = #{chatMsg.senduserid} and receiver_id = #{chatMsg.reciveuserid}
   </select>
 
+  <select id="unreadMessages" resultType="com.chat.bean.ChatMsg">
+    select * from tb_disable_date_message where
+      sender_id = #{chatMsg.senduserid} and receiver_id = #{chatMsg.reciveuserid} and message_type = 0
+  </select>
+
+  <update id="alreadyRead" parameterType="com.chat.bean.ChatMsg">
+    update set message_type = 1 where id = #{id}
+  </update>
+
 </mapper>

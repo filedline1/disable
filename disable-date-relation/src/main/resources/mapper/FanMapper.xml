@@ -14,7 +14,7 @@
 
     <select id="selectFanById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         SELECT * FROM
-        `tb_disable_date_fans` where id = #{id}
+            `tb_disable_date_fans` where id = #{id}
     </select>
 
     selectFanById
@@ -29,7 +29,7 @@
 
     <select id="selectFollowerCountByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT count(*) FROM
-        `tb_disable_date_fans` where (user_id = #{userId} and status = 2)
+            `tb_disable_date_fans` where (user_id = #{userId} and status = 2)
     </select>
 
     <select id="selectAttentionStatus" parameterType="java.lang.Integer" resultType="java.lang.Integer">
@@ -41,7 +41,7 @@
     <select id="selectStatusBetweenTwoUser" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select * from `tb_disable_date_fans` where
             (user_id = #{firstUserId} and follower = #{secondUserId})
-            or (user_id = #{secondUserId} and follower = #{firstUserId})
+                                                or (user_id = #{secondUserId} and follower = #{firstUserId})
     </select>
 
     <update id="addAttention" parameterType="com.relation.bean.Fan">

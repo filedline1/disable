@@ -3,19 +3,19 @@
 <mapper namespace="com.chat.mapper.ChatFriendsMapper">
 
     <resultMap id="BaseResultMap" type="com.chat.bean.ChatFriends">
-        <id column="person_id" jdbcType="VARCHAR" property="userid"/>
-        <result column="person_name" jdbcType="VARCHAR" property="nickname"/>
-        <result column="image_path" jdbcType="VARCHAR" property="uimg"/>
+        <id column="user_id" jdbcType="VARCHAR" property="userid"/>
+        <result column="nick_name" jdbcType="VARCHAR" property="nickname"/>
+        <result column="head_pic_path" jdbcType="VARCHAR" property="uimg"/>
     </resultMap>
 
     <resultMap id="UserBaseResultMap" type="com.chat.bean.Userinfo">
-        <id column="person_id" jdbcType="INTEGER" property="userid"/>
-        <result column="person_name" jdbcType="VARCHAR" property="nickname"/>
-        <result column="image_path" jdbcType="VARCHAR" property="uimg"/>
+        <id column="user_id" jdbcType="INTEGER" property="userid"/>
+        <result column="nick_name" jdbcType="VARCHAR" property="nickname"/>
+        <result column="head_pic_path" jdbcType="VARCHAR" property="uimg"/>
     </resultMap>
 
     <select id="LookUserAllFriends" resultMap="BaseResultMap" parameterType="java.lang.String">
-        select person_id,person_name,image_path from tb_disable_date_person_basic_info where person_id in
+        select user_id,nick_name,head_pic_path from tb_disable_date_user where user_id in
                                                                                              (select a.fuser_id from tb_disable_date_chat_friends a where a.user_id=#{userid})
     </select>
     <insert id="InsertUserFriend" parameterType="com.chat.bean.ChatFriends">
@@ -25,7 +25,7 @@
         select id from tb_disable_date_chat_friends where user_id=#{userid} and fuser_id=#{fuserid}
     </select>
     <select id="LkUserinfoByUserid" parameterType="java.lang.String" resultMap="UserBaseResultMap">
-        select person_id,person_name,image_path from tb_disable_date_person_basic_info where person_id=#{userid}
+        select user_id,nick_name,head_pic_path from tb_disable_date_user where user_id=#{userid}
     </select>
 
 

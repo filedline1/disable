@@ -13,7 +13,10 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +69,24 @@ public class FanRestClient {
         // 4.结果解析
         List<Fan> fans = handleFanResponse(response);
         return fans;
+    }
+
+    public long getFansCountByUserId(Integer userId) throws IOException{
+        // 1.准备request
+        SearchRequest request = new SearchRequest("disable-date-fans");
+        // 2.准备请求参数
+        request.source().query(QueryBuilders.termQuery("userId", userId.toString()));
+        // 3.发送请求，得到响应
+        SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+        // 4.结果解析
+        long count = handleFansCount(response);
+        return count;
+    }
+
+    private long handleFansCount(SearchResponse response) {
+        SearchHits searchHits = response.getHits();
+        long total = searchHits.getTotalHits().value;
+        return total;
     }
 
     /**
@@ -130,16 +151,21 @@ public class FanRestClient {
 
     /**
      * 根据id将要删除的关注记录从索引库中删除
-     * @param id
+     * @param userId
      * @return 返回1 表示成功
      */
-    public int deleteFanFromIndexById(Integer id) {
+    public long deleteByUserId(Integer userId) {
         try {
             //1. 准备Request
-            DeleteRequest request = new DeleteRequest("disable-date-fans", id.toString());
+            DeleteByQueryRequest request = new DeleteByQueryRequest("disable-date-fans");
+            //2. 根据条件生成boolQueryBuilder
+            BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+            boolQueryBuilder.must(QueryBuilders.matchQuery("userId",userId));
+            request.setQuery(boolQueryBuilder);
+            DeleteRequest deleteRequest = new DeleteRequest("disable-date-fans");
+            BulkByScrollResponse bulkResponse = client.deleteByQuery(request,RequestOptions.DEFAULT);
             //发送请求
-            client.delete(request,RequestOptions.DEFAULT);
-            return 1;
+            return bulkResponse.getDeleted();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

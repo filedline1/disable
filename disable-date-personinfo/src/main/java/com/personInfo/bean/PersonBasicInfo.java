@@ -14,19 +14,11 @@ public class PersonBasicInfo {
 
     private String personName;
 
-    private Integer isVip;
-
-    private Integer sorts;
-
     private Integer sex;
 
     private Integer age;
 
     private String phone;
-
-    private String imagePath;
-
-    private String disableNumber;
 
     private String workAddr;
 
@@ -107,21 +99,6 @@ public class PersonBasicInfo {
         this.phone = phone;
     }
 
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    public String getDisableNumber() {
-        return disableNumber;
-    }
-
-    public void setDisableNumber(String disableNumber) {
-        this.disableNumber = disableNumber;
-    }
 
     public String getWorkAddr() {
         return workAddr;
@@ -275,30 +252,15 @@ public class PersonBasicInfo {
         this.email = email;
     }
 
-    public Integer getIsVip() {
-        return isVip;
+    public PersonBasicInfo() {
     }
 
-    public void setIsVip(Integer isVip) {
-        this.isVip = isVip;
-    }
-
-    public Integer getSorts() {
-        return sorts;
-    }
-
-    public void setSorts(Integer sorts) {
-        this.sorts = sorts;
-    }
-
-    public PersonBasicInfo(Integer personId, String personName, Integer sex, Integer age, String phone, String imagePath, String disableNumber, String workAddr, String householdAddr, String maritalStatus, Integer height, Integer weight, String degree, Integer income, String occupation, String housingStatus, String carStatus, Date expectedMarryTime, String personIntro, String personSign, String longitude, String latitude, String wechat, String wechatCodeImagesPath, String qq, String email) {
+    public PersonBasicInfo(Integer personId, String personName, Integer sex, Integer age, String phone, String workAddr, String householdAddr, String maritalStatus, Integer height, Integer weight, String degree, Integer income, String occupation, String housingStatus, String carStatus, Date expectedMarryTime, String personIntro, String personSign, String longitude, String latitude, String wechat, String wechatCodeImagesPath, String qq, String email) {
         this.personId = personId;
         this.personName = personName;
         this.sex = sex;
         this.age = age;
         this.phone = phone;
-        this.imagePath = imagePath;
-        this.disableNumber = disableNumber;
         this.workAddr = workAddr;
         this.householdAddr = householdAddr;
         this.maritalStatus = maritalStatus;
@@ -320,11 +282,6 @@ public class PersonBasicInfo {
         this.email = email;
     }
 
-    public PersonBasicInfo() {
-    }
-
-
-
     @Override
     public String toString() {
         return "PersonBasicInfo{" +
@@ -333,8 +290,6 @@ public class PersonBasicInfo {
                 ", sex=" + sex +
                 ", age=" + age +
                 ", phone='" + phone + '\'' +
-                ", imagePath='" + imagePath + '\'' +
-                ", disableNumber='" + disableNumber + '\'' +
                 ", workAddr='" + workAddr + '\'' +
                 ", householdAddr='" + householdAddr + '\'' +
                 ", maritalStatus='" + maritalStatus + '\'' +
@@ -357,3 +312,4 @@ public class PersonBasicInfo {
                 '}';
     }
 }
+

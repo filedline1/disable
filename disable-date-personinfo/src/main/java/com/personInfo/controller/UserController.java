@@ -26,6 +26,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -167,5 +168,47 @@ public class UserController {
 
     }
 
+    @PutMapping("/signIn")
+    public synchronized Result signIn(@RequestParam("reward") Integer reward,@RequestParam("loginName") String loginName){
+        String message = userService.signIn(reward, loginName);
+        System.out.println(message);
+        if (message.equals(ServiceResultEnum.ALREADY_SIGN_IN.getResult())){
+            return ResultGenerator.genFailResult("今日已签到");
+        }
+        if (message.equals(ServiceResultEnum.DB_ERROR.getResult())){
+            return ResultGenerator.genErrorResult(500,"签到服务出错，请及时联系客服！");
+        }
+        return ResultGenerator.genSuccessResult("签到成功");
+    }
+
+    @PostMapping("/openVip")
+    public synchronized Result openVip(@RequestParam("loginName") String loginName,@RequestParam("month") Integer month){
+        int i = userService.openVip(loginName, month);
+        if (i > 0){
+            return ResultGenerator.genSuccessResult("开通成功！");
+        } else {
+            return ResultGenerator.genSuccessResult("开通失败！ 请及时与管理员联系!");
+        }
+    }
+
+    @PostMapping("/renewalVip")
+    public synchronized Result renewalVip(@RequestParam("loginName") String loginName,@RequestParam("month") Integer month){
+        int i = userService.renewalVip(loginName, month);
+        if (i > 0){
+            return ResultGenerator.genSuccessResult("续费成功！");
+        } else {
+            return ResultGenerator.genSuccessResult("续费失败！ 请及时与管理员联系!");
+        }
+    }
+
+    @PostMapping("/getInfo")
+    public synchronized Result getInfo(@RequestParam("loginName") String loginName){
+        User user = userService.selectUserByLoginName(loginName);
+        if (user != null){
+            return ResultGenerator.genSuccessResult(user);
+        } else {
+            return ResultGenerator.genFailResult("用户不存在");
+        }
+    }
 
 }

@@ -31,8 +31,9 @@ public class ChatWebSocket {
 
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static int onlineCount = 0;
+
     //concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。若要实现服务端与单一客户端通信的话，可以使用Map来存放，其中Key可以为用户标识
-    private static ConcurrentHashMap<String, ChatWebSocket> webSocketSet = new ConcurrentHashMap<String, ChatWebSocket>();
+    public final static ConcurrentHashMap<String, ChatWebSocket> webSocketSet = new ConcurrentHashMap<String, ChatWebSocket>();
     //与某个客户端的连接会话，需要通过它来给客户端发送数据
     private Session WebSocketsession;
     //当前发消息的人员编号
@@ -79,6 +80,15 @@ public class ChatWebSocket {
         JSONObject jsonObject = JSONObject.parseObject(chatmsg);
         //给指定的人发消息
         sendToUser(jsonObject.toJavaObject(ChatMsg.class));
+        //服务端推送消息提示给用户
+        final ChatMsg chatMessage = jsonObject.toJavaObject(ChatMsg.class);
+        //若用户在后台或者不在线，服务器推送消息
+        if (chatMessage.getMsgtype().equals("0")){
+            chatMessage.setSendtext("收到" + chatMessage.getSenduserid() + "发来的消息");
+            //将推送信息默认设置为已读
+            chatMessage.setMsgtype("1");
+            sendToUser(chatMessage);
+        }
         //sendAll(message);
     }
 

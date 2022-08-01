@@ -12,12 +12,14 @@ import com.relation.utils.PageQueryUtil;
 import com.relation.utils.Result;
 import com.relation.utils.ResultGenerator;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-
 import java.util.List;
-import java.util.Map;
+
+import static com.relation.constants.MqConstants.*;
+import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
 
 
 @RestController
@@ -30,12 +32,6 @@ public class FanController {
 
     @Autowired
     FollowService followService;
-
-    @Autowired
-    FanRestClient fanRestClient;
-
-    @Autowired
-    FollowRestClient followRestClient;
 
     /**
      * 分页查询粉丝对象
@@ -51,7 +47,7 @@ public class FanController {
             return ResultGenerator.genErrorResult(400,"参数传递格式有误！");
         }
         PageQueryUtil params = new PageQueryUtil(start, limit);
-        List<Fan> fans = fanRestClient.findRecordListFromIndex(params);
+        List<Fan> fans = fanService.selectFollowerByUserId(userId, start, limit);
         return ResultGenerator.genSuccessResult(fans);
     }
 
@@ -69,7 +65,7 @@ public class FanController {
              return ResultGenerator.genErrorResult(400,"参数传递格式有误！");
          }
          PageQueryUtil params = new PageQueryUtil(start, limit);
-         List<Follow> follows = followRestClient.findRecordListFromIndex(params);
+         List<Follow> follows = followService.selectAttentionByUserId(userId, start, limit);
          return ResultGenerator.genSuccessResult(follows);
      }
 
@@ -80,9 +76,14 @@ public class FanController {
      */
     @RequestMapping(value = "/searchFanCount", method = RequestMethod.POST)
     @ResponseBody
-    public Integer selectFollowerCountByUserId(Integer userId){
-        Integer count = fanService.selectFollowerCountByUserId(userId);
-        return count;
+    public Result selectFollowerCountByUserId(Integer userId){
+        int count;
+        try {
+            count = fanService.selectFollowerCountByUserId(userId);
+        } catch (Exception e){
+            return ResultGenerator.genErrorResult(500,"服务器错误请及时联系管理员");
+        }
+        return ResultGenerator.genSuccessResult(count);
     }
 
     /**
@@ -92,9 +93,14 @@ public class FanController {
      */
     @RequestMapping(value = "/searchAttentionCount", method = RequestMethod.POST)
     @ResponseBody
-    public Integer selectAttentionCountByUserId(Integer userId){
-        Integer count = followService.selectAttentionCountByUserId(userId);
-        return count;
+    public Result selectAttentionCountByUserId(Integer userId){
+        int count;
+        try {
+            count = followService.selectAttentionCountByUserId(userId);
+        } catch (Exception e){
+            return ResultGenerator.genErrorResult(500,"服务器错误请及时联系管理员");
+        }
+        return ResultGenerator.genSuccessResult(count);
     }
 
     /**
@@ -118,11 +124,15 @@ public class FanController {
     @RequestMapping(value = "/addAttention", method = RequestMethod.POST)
     @ResponseBody
     public Result addAttention(Fan fan){
-        String message = fanService.addAttention(fan);
-        if (message.equals(ServiceResultEnum.SUCCESS.getResult())){
-            return ResultGenerator.genSuccessResult();
+        if (fan.getUserId() == null || fan.getFollower() == null) {
+            return ResultGenerator.genFailResult("参数异常！");
         }
-        return ResultGenerator.genFailResult("关注失败！");
+        System.out.println(fan);
+        String message = fanService.addAttention(fan);
+        if (!message.equals(ServiceResultEnum.SUCCESS.getResult())){
+            return ResultGenerator.genErrorResult(500,"服务器错误，请及时联系管理员！");
+        }
+        return ResultGenerator.genSuccessResult();
     }
 
     /**
@@ -133,11 +143,15 @@ public class FanController {
     @RequestMapping(value = "/cancelAttention", method = RequestMethod.POST)
     @ResponseBody
     public Result cancelAttention(Fan fan){
-        String message = fanService.cancelAttention(fan);
-        if (message.equals(ServiceResultEnum.SUCCESS.getResult())){
-            return ResultGenerator.genSuccessResult();
+        if (fan.getUserId() == null || fan.getFollower() == null) {
+            return ResultGenerator.genFailResult("参数异常！");
         }
-        return ResultGenerator.genFailResult("取消关注失败！");
+        System.out.println(fan);
+        String message = fanService.cancelAttention(fan);
+        if (!message.equals(ServiceResultEnum.SUCCESS.getResult())){
+            return ResultGenerator.genErrorResult(500,"服务器错误，请及时联系管理员！");
+        }
+        return ResultGenerator.genSuccessResult();
     }
 
 

@@ -20,7 +20,7 @@ public class Result {
     private Map<String, Object> data = new HashMap<>();
 
     // 构造器私有
-    private Result(){}
+    public Result(){}
 
     // 通用返回成功
     public static Result ok() {

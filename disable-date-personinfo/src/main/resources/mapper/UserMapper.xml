@@ -6,12 +6,22 @@
         <result column="nick_name" jdbcType="VARCHAR" property="nickName"/>
         <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
         <result column="password_md5" jdbcType="VARCHAR" property="passwordMd5"/>
+        <result column="sex" jdbcType="TINYINT" property="sex"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="is_vip" jdbcType="TINYINT" property="isVip"/>
+        <result column="sorts" jdbcType="INTEGER" property="sorts"/>
+        <result column="disable_number" jdbcType="VARCHAR" property="disableNumber"/>
+        <result column="head_pic_path" jdbcType="VARCHAR" property="headPicPath"/>
+        <result column="online_time" jdbcType="VARCHAR" property="onlineTime"/>
         <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
         <result column="locked_flag" jdbcType="TINYINT" property="lockedFlag"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="last_time" jdbcType="TIMESTAMP" property="lastTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        user_id, nick_name, login_name, password_md5, is_deleted, locked_flag, create_time
+        user_id, nick_name, login_name, password_md5,sex,age,is_vip,sorts,disable_number,head_pic_path,online_time,
+        is_deleted, locked_flag, create_time,update_time,last_time
     </sql>
     <select id="selectUserByLoginName" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
@@ -19,7 +29,6 @@
         from `tb_disable_date_user`
         where login_name = #{loginName,jdbcType=VARCHAR}
     </select>
-
 
     <select id="selectUserByNickName" parameterType="Map" resultMap="BaseResultMap">
         select
@@ -75,6 +84,29 @@
         </trim>
     </insert>
 
+    <update id="signIn" >
+        update `tb_disable_date_user`
+        set
+            sorts = sorts + #{param1},
+            `last_time` = CURRENT_TIMESTAMP
+        where login_name = #{param2}
+    </update>
+
+    <update id="openVip" >
+        update `tb_disable_date_user`
+        set
+            expiration_time = date_add(NOW(),interval #{param2} MONTH),
+            is_vip = 1
+        where login_name = #{param1}
+    </update>
+
+    <update id="renewalVip" >
+        update `tb_disable_date_user`
+        set
+            expiration_time = date_add(expiration_time,interval #{param2} MONTH),
+            is_vip = 1
+        where login_name = #{param1}
+    </update>
 
     <update id="updatePassword" parameterType="java.lang.String">
     update `tb_disable_date_user`
@@ -94,7 +126,5 @@
     <delete id="delete" parameterType="java.lang.Integer">
         delete from `tb_disable_date_user` where user_id = #{userId}
     </delete>
-
-
 
 </mapper>

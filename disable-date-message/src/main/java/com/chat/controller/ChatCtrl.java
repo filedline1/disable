@@ -11,6 +11,7 @@ import com.chat.util.Constants;
 import com.chat.util.EmojiFilter;
 import com.chat.util.Result;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,8 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
+
+import static com.chat.controller.ChatWebSocket.webSocketSet;
 
 @Controller
 public class ChatCtrl {
@@ -109,7 +112,7 @@ public class ChatCtrl {
      * */
     @PostMapping("/chat/lkuschatmsg/{reviceuserid}")
     @ResponseBody public List<ChatMsg> lookFriendsMessage(HttpSession session, @PathVariable("reviceuserid")String reviceuserid){
-        String userid=(String)session.getAttribute("userid");
+        String userid = (String)session.getAttribute("userid");
         return chatMsgService.LookTwoUserMsg(new ChatMsg().setSenduserid(userid).setReciveuserid(reviceuserid));
     }
 
@@ -141,4 +144,40 @@ public class ChatCtrl {
         res.put("data", resUrl);
         return res;
     }
+
+    @PostMapping("/chat/unreadMessage")
+    @ResponseBody
+    //获取指定收信人的未读信息
+    List<ChatMsg> unreadMessages(@RequestParam("senduserid") Integer senduserid,@RequestParam("reciveuserid") Integer reciveuserid){
+        final List<ChatMsg> chatMsgs = chatMsgService.unreadMessages(senduserid, reciveuserid);
+        return chatMsgs;
+    }
+
+    @PostMapping("/chat/alreadyRead")
+    @ResponseBody
+    //将消息设置为已读
+    public Result alreadyRead(ChatMsg chatMsg){
+        final int i = chatMsgService.alreadyRead(chatMsg);
+        if (i > 0){
+            return Result.ok();
+        } else {
+            return Result.error();
+        }
+    }
+
+    @PostMapping("/chat/websocketIsOnline")
+    @ResponseBody
+    //判断websocket连接是否在线
+    public Result websocketIsOnline(@Param("userno") String userno){
+        if (webSocketSet.containsKey(userno)){
+            Result result = new Result();
+            result.setMessage(userno + "用户websocket在线");
+            return result;
+        } else {
+            Result result = new Result();
+            result.setMessage(userno + "用户websocket不在线");
+            return result;
+        }
+    }
+
 }

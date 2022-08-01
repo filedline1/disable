@@ -5,11 +5,13 @@ import com.personInfo.common.ServiceResultEnum;
 import com.personInfo.mapper.UserMapper;
 import com.personInfo.service.UserService;
 import com.personInfo.util.MD5Util;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Mr.Jiang
@@ -105,4 +107,66 @@ public class UserServiceImpl implements UserService {
         }
         return ServiceResultEnum.DB_ERROR.getResult();
     }
+
+    @Override
+    public String signIn(Integer reward,String loginName){
+        User userTemp = userMapper.selectUserByLoginName(loginName);
+        Date lastTime = userTemp.getLastTime();
+        System.out.println(userTemp);
+        Date date = new Date();
+        int insert;
+        int currentTimeYear = lastTime.getYear();
+        int currentTimeMonth = lastTime.getMonth();
+        int currentTimeDay = lastTime.getDate();
+        if (currentTimeYear < date.getYear()){
+            insert = userMapper.signIn(reward, loginName);
+            System.out.println("lastTimeYear " + currentTimeYear);
+            System.out.println("date.getYear() " + date.getYear());
+            if (insert > 0) {
+                return ServiceResultEnum.SUCCESS_SIGN_IN.getResult();
+            } else {
+                return ServiceResultEnum.DB_ERROR.getResult();
+            }
+        }
+        else if (currentTimeMonth < date.getMonth()){
+            insert = userMapper.signIn(reward, loginName);
+            System.out.println("lastTimeMonth " + currentTimeMonth);
+            System.out.println("date.getMonth() " + date.getMonth());
+            if (insert > 0) {
+                return ServiceResultEnum.SUCCESS_SIGN_IN.getResult();
+            } else {
+                return ServiceResultEnum.DB_ERROR.getResult();
+            }
+        }
+        else if (currentTimeDay < date.getDate()){
+            insert = userMapper.signIn(reward, loginName);
+            System.out.println("lastTimeDay " + currentTimeDay);
+            System.out.println("date.getDate() " + date.getDate());
+            if (insert > 0) {
+                return ServiceResultEnum.SUCCESS_SIGN_IN.getResult();
+            } else {
+                return ServiceResultEnum.DB_ERROR.getResult();
+            }
+        }
+        else if (currentTimeDay == date.getDate()){
+            return ServiceResultEnum.ALREADY_SIGN_IN.getResult();
+        }
+        return ServiceResultEnum.ERROR.getResult();
+    }
+
+    @Override
+    public int openVip(String loginName, Integer month){
+        return userMapper.openVip(loginName, month);
+    }
+
+    @Override
+    public int renewalVip(@Param("loginName") String loginName, @Param("month")Integer month){
+        return userMapper.renewalVip(loginName, month);
+    }
+
+
+    public User selectUserByLoginName(String loginName){
+        return userMapper.selectUserByLoginName(loginName);
+    }
+
 }

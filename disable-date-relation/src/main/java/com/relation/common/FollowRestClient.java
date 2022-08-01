@@ -1,7 +1,6 @@
 package com.relation.common;
 
 import com.alibaba.fastjson.JSON;
-import com.relation.bean.Fan;
 import com.relation.bean.Follow;
 import com.relation.service.FanService;
 import com.relation.service.FollowService;
@@ -155,7 +154,7 @@ public class FollowRestClient {
             try{
                 // 4.4.获取source
                 String json = hit.getSourceAsString();
-                // 4.5.反序列化，非高亮的
+                // 4.5.反序列化
                 Follow follow = JSON.parseObject(json, Follow.class);
                 // 4.6.处理结果
                 list.add(follow);

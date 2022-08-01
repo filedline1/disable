@@ -12,6 +12,9 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 public class ChatMsg {
+
+    private Integer id;
+
     private String senduserid;
 
     private String reciveuserid;

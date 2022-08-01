@@ -4,13 +4,9 @@
     <resultMap id="BaseResultMap" type="com.personInfo.bean.PersonBasicInfo">
         <id column="person_id" jdbcType="INTEGER" property="personId"/>
         <result column="person_name" jdbcType="VARCHAR" property="personName"/>
-        <result column="is_vip" jdbcType="TINYINT" property="isVip"/>
-        <result column="sorts" jdbcType="INTEGER" property="sorts"/>
         <result column="sex" jdbcType="INTEGER" property="sex"/>
         <result column="age" jdbcType="INTEGER" property="age"/>
         <result column="phone" jdbcType="VARCHAR" property="phone"/>
-        <result column="image_path" jdbcType="VARCHAR" property="imagePath"/>
-        <result column="disable_number" jdbcType="VARCHAR" property="disableNumber"/>
         <result column="work_addr" jdbcType="VARCHAR" property="workAddr"/>
         <result column="household_addr" jdbcType="VARCHAR" property="householdAddr"/>
         <result column="marital_status" jdbcType="VARCHAR" property="maritalStatus"/>
@@ -32,7 +28,7 @@
         <result column="email" jdbcType="VARCHAR" property="email"/>
     </resultMap>
     <sql id="Base_Column_List">
-        person_id, person_name,is_vip,sorts, sex, age, phone, image_path, disable_number, work_addr, household_addr,
+        person_id, person_name, sex, age, phone, work_addr, household_addr,
         marital_status, height, weight, degree, income, occupation, housing_status, car_status,
         expected_marry_time, person_intro, longitude, latitude, wechat, wechat_code_images_path, qq, email
     </sql>
@@ -61,13 +57,13 @@
 
     <insert id="insert" parameterType="com.personInfo.bean.PersonBasicInfo">
     insert into `tb_disable_date_person_basic_info`
-        (person_id, person_name,is_vip,sorts, sex, age, phone, image_path, disable_number, work_addr, household_addr,
+        (person_id, person_name, sex, age, phone, work_addr, household_addr,
         marital_status, height, weight, degree, income, occupation, housing_status, car_status,
         expected_marry_time, person_intro, longitude, latitude, wechat, wechat_code_images_path, qq, email)
     values (#{personId,jdbcType=INTEGER}, #{personName,jdbcType=VARCHAR},
-            #{isVip,jdbcType=TINYINT},#{sorts,jdbcType=INTEGER},#{sex,jdbcType=INTEGER},
-            #{age,jdbcType=INTEGER},#{phone,jdbcType=VARCHAR},#{imagePath,jdbcType=VARCHAR},
-            #{disableNumber,jdbcType=VARCHAR},#{workAddr,jdbcType=VARCHAR},#{householdAddr,jdbcType=VARCHAR},
+            #{sex,jdbcType=INTEGER},
+            #{age,jdbcType=INTEGER},#{phone,jdbcType=VARCHAR},
+            #{workAddr,jdbcType=VARCHAR},#{householdAddr,jdbcType=VARCHAR},
             #{maritalStatus,jdbcType=VARCHAR},#{height,jdbcType=INTEGER},#{weight,jdbcType=VARCHAR},
             #{degree,jdbcType=VARCHAR},#{income,jdbcType=INTEGER},#{occupation,jdbcType=INTEGER},
             #{housingStatus,jdbcType=VARCHAR},#{carStatus,jdbcType=VARCHAR},#{expectedMarryTime,jdbcType=TIMESTAMP},#{personIntro,jdbcType=VARCHAR},
@@ -77,16 +73,16 @@
     </insert>
 
     <insert id="insertBatch" parameterType="com.personInfo.bean.PersonBasicInfo">
-        insert into `tb_disable_date_person_basic_info` ( person_id, person_name, is_vip, sorts,sex, age, phone, image_path, disable_number, work_addr, household_addr,
+        insert into `tb_disable_date_person_basic_info` ( person_id, person_name, sex, age, phone, work_addr, household_addr,
         marital_status, height, weight, degree, income, occupation, housing_status, car_status,
         expected_marry_time, person_intro, longitude, latitude, wechat, wechat_code_images_path, qq, email)
         values
         <foreach collection="recordItems" item="recordItem" separator=",">
             (
                 #{recordItem.personId,jdbcType=INTEGER}, #{recordItem.personName,jdbcType=VARCHAR},
-                #{recordItem.isVip,jdbcType=TINYINT},#{recordItem.sorts,jdbcType=INTEGER},#{recordItem.sex,jdbcType=INTEGER},
-                #{recordItem.age,jdbcType=INTEGER},#{recordItem.phone,jdbcType=VARCHAR},#{recordItem.imagePath,jdbcType=VARCHAR},
-                #{recordItem.disableNumber,jdbcType=VARCHAR},#{recordItem.workAddr,jdbcType=VARCHAR},#{recordItem.householdAddr,jdbcType=VARCHAR},
+                #{recordItem.sex,jdbcType=INTEGER},
+                #{recordItem.age,jdbcType=INTEGER},#{recordItem.phone,jdbcType=VARCHAR},
+                #{recordItem.workAddr,jdbcType=VARCHAR},#{recordItem.householdAddr,jdbcType=VARCHAR},
                 #{recordItem.maritalStatus,jdbcType=VARCHAR},#{recordItem.height,jdbcType=INTEGER},#{recordItem.weight,jdbcType=VARCHAR},
                 #{recordItem.degree,jdbcType=VARCHAR},#{recordItem.income,jdbcType=INTEGER},#{recordItem.occupation,jdbcType=INTEGER},
                 #{recordItem.housingStatus,jdbcType=VARCHAR},#{recordItem.carStatus,jdbcType=VARCHAR},#{recordItem.expectedMarryTime,jdbcType=TIMESTAMP},
@@ -107,12 +103,6 @@
             <if test="personName != null">
                 person_name,
             </if>
-            <if test="isVip != null">
-                is_vip,
-            </if>
-            <if test="sorts != null">
-                sorts,
-            </if>
             <if test="sex != null">
                 sex,
             </if>
@@ -121,12 +111,6 @@
             </if>
             <if test="phone != null">
                 phone,
-            </if>
-            <if test="disableNumber != null">
-                disable_number,
-            </if>
-            <if test="imagePath != null">
-                image_path,
             </if>
             <if test="workAddr != null">
                 work_addr,
@@ -191,12 +175,6 @@
             <if test="personName != null">
                 #{personName,jdbcType=VARCHAR},
             </if>
-            <if test="isVip != null">
-                #{isVip,jdbcType=TINYINT},
-            </if>
-            <if test="sorts != null">
-                #{sorts,jdbcType=INTEGER},
-            </if>
             <if test="sex != null">
                 #{sex,jdbcType=INTEGER},
             </if>
@@ -205,12 +183,6 @@
             </if>
             <if test="phone != null">
                 #{phone,jdbcType=VARCHAR},
-            </if>
-            <if test="disableNumber != null">
-                #{disableNumber,jdbcType=VARCHAR},
-            </if>
-            <if test="imagePath != null">
-                #{imagePath,jdbcType=VARCHAR},
             </if>
             <if test="workAddr != null">
                 #{workAddr,jdbcType=VARCHAR},
@@ -282,12 +254,6 @@
             <if test="personName != null">
                 person_name = #{personName,jdbcType=VARCHAR},
             </if>
-            <if test="isVip != null">
-                is_vip = #{isVip,jdbcType=TINYINT},
-            </if>
-            <if test="sorts != null">
-                sorts = #{sorts,jdbcType=INTEGER},
-            </if>
             <if test="sex != null">
                 sex = #{sex,jdbcType=INTEGER},
             </if>
@@ -296,12 +262,6 @@
             </if>
             <if test="phone != null">
                 phone = #{phone,jdbcType=VARCHAR},
-            </if>
-            <if test="disableNumber != null">
-                disable_number = #{disableNumber,jdbcType=VARCHAR},
-            </if>
-            <if test="imagePath != null">
-                image_path = #{imagePath,jdbcType=VARCHAR},
             </if>
             <if test="workAddr != null">
                 work_addr = #{workAddr,jdbcType=VARCHAR},
@@ -364,13 +324,9 @@
     update `tb_disable_date_person_basic_info`
     set
         person_name = #{personName,jdbcType=VARCHAR},
-        is_vip = #{isVip,jdbcType=TINYINT},
-        sorts = #{sorts,jdbcType=INTEGER},
         sex = #{sex,jdbcType=INTEGER},
         age = #{age,jdbcType=INTEGER},
         phone = #{phone,jdbcType=VARCHAR},
-        disable_number = #{disableNumber,jdbcType=VARCHAR},
-        image_path = #{imagePath,jdbcType=VARCHAR},
         work_addr = #{workAddr,jdbcType=VARCHAR},
         household_addr = #{householdAddr,jdbcType=VARCHAR},
         marital_status = #{maritalStatus,jdbcType=VARCHAR},

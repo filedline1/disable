@@ -49,32 +49,32 @@ public class FanListener {
             } catch (Exception e){
                 logger.info("FanInsert Insert MQ 队列2 MQ出现异常异常！");
             }
-            System.out.println("[FAN_INSERT_QUEUE队列1] 根据Id找出Fan并新增到索引库--->" + LocalTime.now());
-            logger.info("Token时效队列 监听1（String） {} 中消息： {}",MqConstants.FAN_INSERT_QUEUE,Id);
+            System.out.println("[FAN_INSERT_QUEUE队列2] 根据Id找出Fan并新增到索引库--->" + LocalTime.now());
+            logger.info("Token时效队列 监听2（String） {} 中消息： {}",MqConstants.FAN_INSERT_QUEUE,Id);
         }
     }
 
 
     /**
      * 监听 动态的 删除 的业务
-     * @param id
+     * @param userId
      */
     @RabbitListener(queues = MqConstants.FAN_DELETE_QUEUE)
-    public void listenRequirementDelete1(Integer id){
-        fanRestClient.deleteFanFromIndexById(id);
-        System.out.println("[REQUIREMENT_INSERT_QUEUE队列1] 根据personId找出Requirement并从索引库删除--->" + LocalTime.now());
-        logger.info("Token时效队列 监听1（String） {} 中消息： {}",MqConstants.FAN_DELETE_KEY,id);
+    public void listenRequirementDelete1(Integer userId){
+        fanRestClient.deleteByUserId(userId);
+        System.out.println("[FAN_DELETE_QUEUE队列1] 根据Id找出Fan并从索引库删除--->" + LocalTime.now());
+        logger.info("Token时效队列 监听1（String） {} 中消息： {}",MqConstants.FAN_DELETE_KEY, userId);
     }
 
     /**
      * 监听 动态的 删除 的业务
-     * @param id
+     * @param userId
      */
     @RabbitListener(queues = MqConstants.FAN_DELETE_QUEUE)
-    public void listenRequirementDelete2(Integer id){
-        fanRestClient.deleteFanFromIndexById(id);
-        System.out.println("[REQUIREMENT_INSERT_QUEUE队列2] 根据personId找出Requirement并从索引库删除--->" + LocalTime.now());
-        logger.info("Token时效队列 监听2（String） {} 中消息： {}",MqConstants.FAN_DELETE_KEY,id);
+    public void listenRequirementDelete2(Integer userId){
+        fanRestClient.deleteByUserId(userId);
+        System.out.println("[FAN_DELETE_QUEUE队列2] 根据Id找出Fan并从索引库删除--->" + LocalTime.now());
+        logger.info("Token时效队列 监听2（String） {} 中消息： {}",MqConstants.FAN_DELETE_KEY, userId);
     }
 
 

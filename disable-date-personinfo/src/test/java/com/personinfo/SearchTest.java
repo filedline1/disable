@@ -20,7 +20,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 
 @SpringBootTest
@@ -150,5 +152,11 @@ class SearchTest {
     void tearDown() throws IOException {
         client.close();
     }
+
+//    @Test
+//    public void test1(){
+//        Date date = new Date();
+//        System.out.println(date.getDate());
+//    }
 
 }

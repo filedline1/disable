@@ -7,6 +7,10 @@ public enum ServiceResultEnum {
 
     SUCCESS("success"),
 
+    ALREADY_SIGN_IN("今日已签到"),
+
+    SUCCESS_SIGN_IN("成功签到"),
+
     USER_IS_EXIST("账号已存在"),
 
     USER_NOT_EXIST("账号不存在"),

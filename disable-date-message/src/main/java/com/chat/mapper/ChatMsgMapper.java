@@ -15,5 +15,10 @@ public interface ChatMsgMapper {
     //查询聊天记录
     List<ChatMsg>  LookPersonUserMsg(@Param("chatMsg") ChatMsg chatMsg);
 
+    //将消息设置为已读
+    int alreadyRead(ChatMsg chatMsg);
+
+    //获取指定收信人的未读信息
+    List<ChatMsg> unreadMessages(@Param("senduserid") Integer senduserid,@Param("reciveuserid") Integer reciveuserid);
 
 }

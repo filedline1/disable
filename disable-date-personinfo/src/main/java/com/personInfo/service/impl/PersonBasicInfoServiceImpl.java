@@ -50,9 +50,6 @@ public class PersonBasicInfoServiceImpl implements PersonBasicInfoService {
 
     @Override
     public int insertSelective(PersonBasicInfo personBasicInfo) {
-        if (personBasicInfo.getIsVip() == null){
-            personBasicInfo.setIsVip(1);
-        }
         if (personBasicInfo.getPersonName() == null){
             personBasicInfo.setPersonName(NickNameUtil.generateName());
         }
