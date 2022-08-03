@@ -3,6 +3,8 @@ package com.chat.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.chat.bean.ChatFriends;
 import com.chat.bean.ChatMsg;
+import com.chat.bean.Userinfo;
+import com.chat.common.PersonBasicInfoRestClient;
 import com.chat.service.ChatFriendsService;
 import com.chat.service.ChatMsgService;
 import com.chat.service.LoginService;
@@ -22,7 +24,10 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.chat.controller.ChatWebSocket.webSocketSet;
 
@@ -34,6 +39,12 @@ public class ChatCtrl {
     ChatMsgService chatMsgService;
     @Autowired
     LoginService loginService;
+
+    @Autowired
+    PersonBasicInfoRestClient client;
+
+    @Autowired
+    ChatWebSocket chatWebSocket;
 
     /**
      * 上传聊天图片
@@ -58,7 +69,7 @@ public class ChatCtrl {
     }
 
     /**
-     * 添加好友：查询用户
+     * 添加聊天好友模块：查询用户
      * */
     @PostMapping("/chat/lkuser/{username}")
     @ResponseBody public Result lookUser(@PathVariable("username")String username){
@@ -67,10 +78,12 @@ public class ChatCtrl {
         if(uid==null){
             return Result.error().message("未查询到此用户");
         }
-        return Result.ok().data("userinfo",chatFriendsService.LkUserinfoByUserid(uid)).message("用户信息");
+        Map<String,Object> map = new HashMap<>();
+        return Result.ok().data(map).message("用户信息");
     }
+
     /**
-     * 添加好友
+     * 添加聊天好友
      * */
     @PostMapping("/chat/adduser/{fuserid}")
     @ResponseBody public Result toFriendUserIdChat(@PathVariable("fuserid")String fuserid, HttpSession session){
@@ -178,6 +191,25 @@ public class ChatCtrl {
             result.setMessage(userno + "用户websocket不在线");
             return result;
         }
+    }
+
+    //推荐列表
+    @PostMapping("/chat/recommendList")
+    @ResponseBody
+    public Result recommendList(@RequestParam("userId")Integer userId) throws Exception{
+        final List<Userinfo> recommendBeforeList = client.getRecommendList(userId);
+        //筛选在线的人数
+        List<Userinfo> recommendAfterList = new ArrayList<>();
+        for (Userinfo userinfo : recommendBeforeList){
+            String userno = userinfo.getUserid();
+            if (chatWebSocket.isClose(userno) == false){
+                recommendAfterList.add(userinfo);
+            }
+        }
+        Result result = new Result();
+        result.setData(recommendAfterList);
+        result.setSuccess(true);
+        return result;
     }
 
 }

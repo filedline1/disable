@@ -1,9 +1,11 @@
 package com.chat.util;
 
+import com.chat.bean.Userinfo;
 import com.chat.util.exception.ResultCodeEnum;
 import lombok.Data;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,7 +19,7 @@ public class Result {
 
     private String message;
 
-    private Map<String, Object> data = new HashMap<>();
+    private Object data = new Object();
 
     // 构造器私有
     public Result(){}
@@ -57,10 +59,14 @@ public class Result {
         return this;
     }
 
-    // 通用设置data
-    public Result data(String key, Object value) {
-        this.data.put(key, value);
-        return this;
+
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
     }
 
     // 自定义状态信息
@@ -78,6 +84,14 @@ public class Result {
     // 自定义返回结果
     public Result success(Boolean success) {
         this.setSuccess(success);
+        return this;
+    }
+
+
+    public Result data(String key, Object value) {
+        Map map = new HashMap();
+        map.put(key,value);
+        this.data(map);
         return this;
     }
 }

@@ -56,6 +56,20 @@ public class ChatWebSocket {
 
 
     /**
+     * 判断websocket连接是否关闭
+     * @param param
+     * @return
+     */
+    public boolean isClose(@PathParam(value = "userno") String param){
+        if (webSocketSet.containsKey(param)){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    /**
      * 连接关闭调用的方法
      */
     @OnClose
@@ -81,7 +95,7 @@ public class ChatWebSocket {
         //给指定的人发消息
         sendToUser(jsonObject.toJavaObject(ChatMsg.class));
         //服务端推送消息提示给用户
-        final ChatMsg chatMessage = jsonObject.toJavaObject(ChatMsg.class);
+        ChatMsg chatMessage = jsonObject.toJavaObject(ChatMsg.class);
         //若用户在后台或者不在线，服务器推送消息
         if (chatMessage.getMsgtype().equals("0")){
             chatMessage.setSendtext("收到" + chatMessage.getSenduserid() + "发来的消息");
