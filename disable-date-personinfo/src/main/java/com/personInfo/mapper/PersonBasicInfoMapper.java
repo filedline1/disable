@@ -2,7 +2,6 @@ package com.personInfo.mapper;
 
 
 import com.personInfo.bean.PersonBasicInfo;
-import com.personInfo.bean.Requirement;
 import com.personInfo.util.PageQueryUtil;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -16,6 +15,14 @@ import java.util.List;
 
 @Mapper
 public interface PersonBasicInfoMapper {
+
+
+    /**
+     * 批量查询personBasicInfo
+     * @param recordItems
+     * @return
+     */
+    List<PersonBasicInfo> selectBatch(@Param("recordItems") List<Integer> recordItems);
 
     /**
      * 获取记录的分页列表

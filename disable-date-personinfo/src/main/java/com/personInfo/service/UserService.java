@@ -4,9 +4,17 @@ import com.personInfo.bean.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 public interface UserService {
+
+    /**
+     * 批量查询
+     * @param recordItems
+     * @return
+     */
+    public List<User> selectBatch(List<Integer> recordItems);
 
     /**
      * 登录
@@ -32,7 +40,7 @@ public interface UserService {
      * @param newPassword
      * @return
      */
-    public String updatePassword(String loginName,String oldPassword,String newPassword);
+    public int updatePassword(String loginName,String oldPassword,String newPassword);
 
     /**
      * 修改用户昵称
@@ -61,9 +69,9 @@ public interface UserService {
      * 开通会员
      * @param loginName
      * @param month
-     * @return
+     * @return 到期时间
      */
-    public int openVip(String loginName,Integer month);
+    public Date openVip(String loginName, Integer month);
 
     /**
      * 续费会员
@@ -71,7 +79,7 @@ public interface UserService {
      * @param month
      * @return
      */
-    public int renewalVip(@Param("loginName") String loginName,@Param("month")Integer month);
+    public Date renewalVip(@Param("loginName") String loginName,@Param("month")Integer month);
 
     /**
      * 根据用户手机号查询用户信息
@@ -79,5 +87,35 @@ public interface UserService {
      * @return
      */
     public User selectUserByLoginName(String loginName);
+
+    /**
+     *
+     * @param userId
+     * @return
+     */
+    public User selectByPrimaryKey(Integer userId);
+
+
+    /**
+     * 点赞
+     * @param userId
+     * @return
+     */
+    public int addLikesCount(@Param("userId") Integer userId);
+
+    /**
+     * 更新用户的头像路径
+     * @param loginName
+     * @param headPicPath
+     * @return
+     */
+    public int updateHeadPicPath(@Param("loginName") String loginName,@Param("headPicPath") String headPicPath);
+
+    /**
+     * 喜欢
+     * @param userId
+     * @return
+     */
+    public int addLoveCount(@Param("userId") Integer userId);
 
 }

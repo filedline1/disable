@@ -3,13 +3,12 @@ package com.personInfo.controller;
 
 import com.personInfo.bean.Requirement;
 import com.personInfo.common.RequirementRestClient;
-import com.personInfo.constants.MqConstants;
 import com.personInfo.service.RequirementService;
 import com.personInfo.util.PageQueryUtil;
 import com.personInfo.util.Result;
 import com.personInfo.util.ResultGenerator;
+import com.personInfo.constants.MqConstants;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-import static com.personInfo.constants.MqConstants.*;
 import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
 
 /**
@@ -101,7 +99,7 @@ public class RequirementController {
         if (updateDB > 0){
             log.println("mysql成功修改personId为" + requirement.getPersonId() + "的择偶记录");
         }
-        rabbitTemplate.convertAndSend(REQUIREMENT_EXCHANGE,REQUIREMENT_INSERT_KEY,requirement.getPersonId());
+        rabbitTemplate.convertAndSend(MqConstants.REQUIREMENT_EXCHANGE, MqConstants.REQUIREMENT_INSERT_KEY,requirement.getPersonId());
         if (updateDB > 0 ){
             return ResultGenerator.genSuccessResult();
         } else {
@@ -154,7 +152,7 @@ public class RequirementController {
         if (insertDB > 0){
             log.println("mysql成功添加personId为" + requirement.getPersonId() + "的择偶记录");
         }
-        rabbitTemplate.convertAndSend(REQUIREMENT_EXCHANGE, REQUIREMENT_INSERT_KEY,requirement.getPersonId());
+        rabbitTemplate.convertAndSend(MqConstants.REQUIREMENT_EXCHANGE, MqConstants.REQUIREMENT_INSERT_KEY,requirement.getPersonId());
         if (insertDB > 0){
             return ResultGenerator.genSuccessResult("添加成功");
         } else {
@@ -192,7 +190,7 @@ public class RequirementController {
     @ResponseBody
     public Result delete(Integer id){
         int deleteDB = requirementService.delete(id);
-        rabbitTemplate.convertAndSend(REQUIREMENT_EXCHANGE,REQUIREMENT_DELETE_KEY,id);
+        rabbitTemplate.convertAndSend(MqConstants.REQUIREMENT_EXCHANGE, MqConstants.REQUIREMENT_DELETE_KEY,id);
         if (deleteDB > 0){
             log.println("mysql成功删除personId为" + id + "的择偶记录");
         }

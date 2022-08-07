@@ -2,7 +2,6 @@ package com.personInfo.mq;
 
 import com.personInfo.common.RequirementRestClient;
 import com.personInfo.constants.MqConstants;
-import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

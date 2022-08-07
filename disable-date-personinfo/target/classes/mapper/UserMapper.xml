@@ -9,6 +9,8 @@
         <result column="sex" jdbcType="TINYINT" property="sex"/>
         <result column="age" jdbcType="INTEGER" property="age"/>
         <result column="is_vip" jdbcType="TINYINT" property="isVip"/>
+        <result column="love" jdbcType="INTEGER" property="love"/>
+        <result column="likes" jdbcType="INTEGER" property="likes"/>
         <result column="sorts" jdbcType="INTEGER" property="sorts"/>
         <result column="disable_number" jdbcType="VARCHAR" property="disableNumber"/>
         <result column="head_pic_path" jdbcType="VARCHAR" property="headPicPath"/>
@@ -18,11 +20,28 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
         <result column="last_time" jdbcType="TIMESTAMP" property="lastTime"/>
+        <result column="expiration_time" jdbcType="TIMESTAMP" property="expirationTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        user_id, nick_name, login_name, password_md5,sex,age,is_vip,sorts,disable_number,head_pic_path,online_time,
-        is_deleted, locked_flag, create_time,update_time,last_time
+        user_id, nick_name, login_name, password_md5,sex,age,is_vip,love,likes,sorts,disable_number,head_pic_path,online_time,
+        is_deleted, locked_flag, create_time,update_time,last_time,expiration_time
     </sql>
+
+    <select id="selectBatch" resultMap="BaseResultMap">
+        select * from `tb_disable_date_user` where user_id in (
+        <foreach collection="recordItems" item="recordItem" separator=",">
+                #{recordItem,jdbcType=INTEGER}
+        </foreach>
+        )
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `tb_disable_date_user`
+        where user_id = #{userId,jdbcType=INTEGER}
+    </select>
+
     <select id="selectUserByLoginName" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -38,11 +57,13 @@
     </select>
 
 
-
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="userId"
             parameterType="com.personInfo.bean.User">
         insert into `tb_disable_date_user`
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                user_id,
+            </if>
             <if test="nickName != null">
                 nick_name,
             </if>
@@ -63,6 +84,9 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
             <if test="nickName != null">
                 #{nickName,jdbcType=VARCHAR},
             </if>
@@ -83,6 +107,20 @@
             </if>
         </trim>
     </insert>
+
+    <update id="addLoveCount" >
+        update `tb_disable_date_user`
+        set
+            love = love + 1
+        where user_id = #{userId,jdbcType=INTEGER}
+    </update>
+
+    <update id="addLikesCount" >
+        update `tb_disable_date_user`
+        set
+            likes = likes + 1
+        where user_id = #{userId,jdbcType=INTEGER}
+    </update>
 
     <update id="signIn" >
         update `tb_disable_date_user`
@@ -122,6 +160,12 @@
         where login_name = #{loginName,jdbcType=VARCHAR}
     </update>
 
+    <update id="updateHeadPicPath" parameterType="java.lang.String">
+        update `tb_disable_date_user`
+        set
+            head_pic_path = #{headPicPath,jdbcType=VARCHAR}
+        where login_name = #{loginName,jdbcType=VARCHAR}
+    </update>
 
     <delete id="delete" parameterType="java.lang.Integer">
         delete from `tb_disable_date_user` where user_id = #{userId}

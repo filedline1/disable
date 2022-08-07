@@ -39,6 +39,16 @@
         where person_id = #{personId,jdbcType=INTEGER}
     </select>
 
+    <select id="selectBatch" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select * from `tb_disable_date_person_basic_info`where
+        <foreach collection="recordItems" item="recordItem" separator=",">
+            (
+                #{recordItem.personId,jdbcType=INTEGER}
+            )
+        </foreach>
+    </select>
+
+
     <select id="selectByPhone" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -97,9 +107,9 @@
             parameterType="com.personInfo.bean.PersonBasicInfo">
         insert into `tb_disable_date_person_basic_info`
         <trim prefix="(" suffix=")" suffixOverrides=",">
-<!--            <if test="personId != null">-->
-<!--                person_id,-->
-<!--            </if>-->
+            <if test="personId != null">
+                person_id,
+            </if>
             <if test="personName != null">
                 person_name,
             </if>
@@ -169,9 +179,9 @@
         </trim>
 
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-<!--            <if test="personId != null">-->
-<!--                #{personId,jdbcType=INTEGER},-->
-<!--            </if>-->
+            <if test="personId != null">
+                #{personId,jdbcType=INTEGER},
+            </if>
             <if test="personName != null">
                 #{personName,jdbcType=VARCHAR},
             </if>

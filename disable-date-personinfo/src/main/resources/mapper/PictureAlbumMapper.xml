@@ -22,6 +22,14 @@
     where id = #{id,jdbcType=BIGINT}
   </select>
 
+  <select id="findRecordList" parameterType="Map" resultMap="BaseResultMap">
+    SELECT * FROM
+    `tb_disable_picture_album`
+    <if test="start!=null and limit!=null">
+      LIMIT #{start},#{limit}
+    </if>
+  </select>
+
 
   <select id="selectPictureByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
@@ -30,7 +38,7 @@
     where user_id = #{userId,jdbcType=BIGINT}
   </select>
 
-  <select id="selectPictureCountByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectPictureCountByUserId" parameterType="java.lang.Long" resultType="java.lang.Integer">
     select count(*)
     from tb_disable_picture_album
     where user_id = #{userId,jdbcType=BIGINT}
@@ -41,7 +49,8 @@
     delete from tb_disable_picture_album
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.personInfo.bean.PictureAlbum">
+  <insert id="insert" parameterType="com.personInfo.bean.PictureAlbum"
+  keyProperty="id" useGeneratedKeys="true">
     insert into tb_disable_picture_album (id, user_id, pic_desc, 
       pic_path, like_counts, status, 
       create_time)
@@ -49,12 +58,10 @@
       #{picPath,jdbcType=VARCHAR}, #{likeCounts,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.personInfo.bean.PictureAlbum">
+  <insert id="insertSelective" parameterType="com.personInfo.bean.PictureAlbum"
+          useGeneratedKeys="true" keyProperty="id">
     insert into tb_disable_picture_album
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="userId != null">
         user_id,
       </if>
@@ -75,9 +82,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
       <if test="userId != null">
         #{userId,jdbcType=BIGINT},
       </if>

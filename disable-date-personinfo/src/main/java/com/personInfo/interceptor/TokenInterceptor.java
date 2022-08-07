@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 *   身份验证，没有验证的被拦截
 * */
 //@Component
-public class TokenInterceptor implements HandlerInterceptor {
+public class TokenInterceptor{ //implements HandlerInterceptor {
 
 
 
@@ -20,7 +20,7 @@ public class TokenInterceptor implements HandlerInterceptor {
      * @param handler
      * @return boolean
      **/
-    @Override
+//    @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
        /* //获取请求头的令牌

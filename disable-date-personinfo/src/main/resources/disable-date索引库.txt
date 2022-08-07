@@ -1,0 +1,322 @@
+PUT /disable-date-requirements
+{
+  "mappings": {
+    "properties": {
+      "person_id":{
+        "type":"keyword"
+        , "index": false
+      },
+      "age_range":{
+        "type":"text",
+        "index": false
+      },
+      "height_range":{
+        "type":"keyword",
+        "index":false
+      },
+      "marry_status":{
+        "type":"keyword"
+        , "index": false
+      },
+      "education_background":{
+        "type":"keyword"
+        , "index": false
+      },
+      "income":{
+        "type":"keyword"
+        , "index": false
+      },
+      "housing_status":{
+        "type":"keyword"
+        , "index": false
+      },
+      "car_status":{
+        "type":"keyword"
+        , "index": false
+      },
+      "other_requirements":{
+        "type":"keyword"
+        , "index": false
+      }
+    }
+  }
+}
+
+GET /disable-date-requirements
+
+DELETE /disable-date-requirements
+
+  
+PUT /disable-date-basic-info
+{
+    "mappings": {
+    "properties": {
+      "person_id":{
+        "type": "keyword"
+      },
+      "person_name":{
+        "type": "keyword"
+      },
+      "sex":{
+        "type": "integer"
+      },
+      "age":{
+        "type": "integer"
+      },
+      "work_addr":{
+        "type": "text",
+        "index": false
+      },     
+      "household_addr":{
+        "type": "text",
+        "index": false
+      },  
+      "marital_status":{
+        "type": "keyword",
+        "index": false
+      },
+      "height":{
+        "type": "integer"
+      },         
+      "weight":{
+        "type": "integer"
+      },      
+      "degree":{
+        "type": "keyword"
+      },      
+      "income":{
+        "type": "integer"
+      },      
+      "occupation":{
+        "type": "keyword"
+      },            
+      "housing_status":{
+        "type": "keyword"
+      },        
+      "car_status":{
+        "type": "keyword"
+      },        
+      "expected_marry_time":{
+        "type": "date",
+        "index": false
+      },        
+      "person_intro":{
+        "type": "text"
+      },        
+      "person_sign":{
+        "type": "text"
+      },        
+      "location":{
+        "type": "geo_point"
+      },        
+      "wechat":{
+        "type": "keyword",
+        "index": false
+      },        
+      "wechat_code_images_path":{
+        "type": "text",
+        "index": false
+      },          
+      "qq":{
+        "type": "text",
+        "index": false
+      },          
+      "email":{
+        "type": "text",
+        "index": false
+      }
+    }
+  }
+}
+
+GET /disable-date-basic-info
+
+DELETE /disable-date-basic-info
+
+PUT /disable-date-detail-info
+{
+    "mappings": {
+    "properties": {
+      "person_id":{
+        "type": "keyword"
+      },
+      "disable_type":{
+        "type": "keyword"
+      },
+      "disable_level":{
+        "type": "integer"
+      },
+      "is_provide":{
+        "type": "integer"
+      },
+      "auxiliary_tool":{
+        "type": "keyword"
+      },
+      "cause":{
+        "type": "keyword"
+      },
+      "is_genetic":{
+        "type": "integer"
+      },
+      "brother_number":{
+        "type": "integer"
+      },
+      "living_will":{
+        "type": "integer"
+      },     
+      "is_smoking":{
+        "type": "integer"
+      },  
+      "marry_form":{
+        "type": "integer"
+      },
+      "is_drinking":{
+        "type": "integer"
+      },         
+      "fertility_status":{
+        "type": "keyword"
+      },      
+      "keeping_status":{
+        "type": "keyword"
+      },      
+      "hobby":{
+        "type": "text",
+        "analyzer": "ik_max_word"
+      },      
+      "blood_type":{
+        "type": "integer"
+      },            
+      "company_type":{
+        "type": "integer"
+      },        
+      "work_industry":{
+        "type": "keyword"
+      },        
+      "housing_location":{
+        "type": "keyword"
+      },        
+      "person_tag":{
+        "type": "text"
+      }  
+    }
+  }
+}
+
+GET /disable-date-detail-info
+
+DELETE /disable-date-detail-info
+
+PUT /disable-date-user
+{
+  "mappings": {
+    "properties": {
+      "user_id":{
+        "type":"integer"
+      },
+      "nick_name":{
+        "type":"keyword"
+      },
+      "login_name":{
+        "type":"keyword"
+      },
+      "password_md5":{
+        "type":"keyword"
+      },
+      "is_deleted":{
+        "type":"integer"
+      },
+      "locked_flag":{
+        "type":"integer"
+      },
+      "create_time":{
+        "type":"date"
+      }
+    }
+  }
+}
+
+GET /disable-date-user
+
+DELETE /disable-date-user
+
+PUT /disable-date-fans
+{
+  "mappings": {
+    "properties": {
+      "id":{
+        "type":"integer"
+      },
+      "user_id":{
+        "type":"integer"
+      },
+      "follower":{
+        "type":"integer"
+      },
+      "status":{
+        "type":"integer"
+      },
+      "create_time":{
+        "type":"date"
+      },
+      "update_time":{
+        "type":"date"
+      }
+    }
+  }
+}
+
+GET /disable-date-fans
+
+DELETE /disable-date-fans
+
+PUT /disable-date-follow
+{
+  "mappings": {
+    "properties": {
+      "id":{
+        "type":"integer"
+      },
+      "user_id":{
+        "type":"integer"
+      },
+      "followed_user_id":{
+        "type":"integer"
+      },
+      "status":{
+        "type":"integer"
+      },
+      "create_time":{
+        "type":"date"
+      },
+      "update_time":{
+        "type":"date"
+      }
+    }
+  }
+}
+
+GET /disable-date-follow
+
+DELETE /disable-date-follow
+
+GET /disable-date-fans/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+
+GET /disable-date-fans/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+
+
+
+
+
+

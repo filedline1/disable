@@ -1,7 +1,6 @@
 package com.personInfo.mapper;
 
 
-import com.personInfo.bean.PersonBasicInfo;
 import com.personInfo.bean.PersonDetailInfo;
 import com.personInfo.util.PageQueryUtil;
 import org.apache.ibatis.annotations.Mapper;

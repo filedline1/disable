@@ -24,6 +24,10 @@ public class User {
 
     Integer isVip;
 
+    Integer love;
+
+    Integer likes;
+
     Integer sorts;
 
     String disableNumber;
@@ -45,10 +49,13 @@ public class User {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     Date lastTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    Date expirationTime;
+
     public User() {
     }
 
-    public User(Integer userId, String nickName, String loginName, String passwordMd5, Integer sex, Integer age, Integer isVip, Integer sorts, String disableNumber, String headPicPath, String onlineTime, Integer isDeleted, Integer lockedFlag, Date createTime, Date updateTime, Date lastTime) {
+    public User(Integer userId, String nickName, String loginName, String passwordMd5, Integer sex, Integer age, Integer isVip, Integer love, Integer likes, Integer sorts, String disableNumber, String headPicPath, String onlineTime, Integer isDeleted, Integer lockedFlag, Date createTime, Date updateTime, Date lastTime, Date expirationTime) {
         this.userId = userId;
         this.nickName = nickName;
         this.loginName = loginName;
@@ -56,6 +63,8 @@ public class User {
         this.sex = sex;
         this.age = age;
         this.isVip = isVip;
+        this.love = love;
+        this.likes = likes;
         this.sorts = sorts;
         this.disableNumber = disableNumber;
         this.headPicPath = headPicPath;
@@ -65,8 +74,8 @@ public class User {
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.lastTime = lastTime;
+        this.expirationTime = expirationTime;
     }
-
     public Integer getUserId() {
         return userId;
     }
@@ -195,6 +204,30 @@ public class User {
         this.lastTime = lastTime;
     }
 
+    public Date getExpirationTime() {
+        return expirationTime;
+    }
+
+    public void setExpirationTime(Date expirationTime) {
+        this.expirationTime = expirationTime;
+    }
+
+    public Integer getLove() {
+        return love;
+    }
+
+    public void setLove(Integer love) {
+        this.love = love;
+    }
+
+    public Integer getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Integer likes) {
+        this.likes = likes;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -205,6 +238,8 @@ public class User {
                 ", sex=" + sex +
                 ", age=" + age +
                 ", isVip=" + isVip +
+                ", love=" + love +
+                ", likes=" + likes +
                 ", sorts=" + sorts +
                 ", disableNumber='" + disableNumber + '\'' +
                 ", headPicPath='" + headPicPath + '\'' +
@@ -214,6 +249,7 @@ public class User {
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 ", lastTime=" + lastTime +
+                ", expirationTime=" + expirationTime +
                 '}';
     }
 }

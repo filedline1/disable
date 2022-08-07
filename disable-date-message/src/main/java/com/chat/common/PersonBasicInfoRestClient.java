@@ -1,6 +1,7 @@
 package com.chat.common;
 
 import com.alibaba.fastjson.JSON;
+import com.chat.bean.Userinfo;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;

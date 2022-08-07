@@ -8,16 +8,14 @@ import com.personInfo.service.PersonBasicInfoService;
 import com.personInfo.util.PageQueryUtil;
 import com.personInfo.util.Result;
 import com.personInfo.util.ResultGenerator;
+import com.personInfo.constants.MqConstants;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import static com.personInfo.constants.MqConstants.*;
 
 import java.util.List;
 
@@ -103,7 +101,7 @@ public class PersonBasicInfoController {
         }
         System.out.println(personBasicInfo);
         int updateDB = personBasicInfoService.updateByPrimaryKeySelective(personBasicInfo);
-        rabbitTemplate.convertAndSend(PERSON_BASIC_INFO_EXCHANGE,PERSON_BASIC_INFO_INSERT_KEY,personBasicInfo.getPersonId());
+        rabbitTemplate.convertAndSend(MqConstants.PERSON_BASIC_INFO_EXCHANGE, MqConstants.PERSON_BASIC_INFO_INSERT_KEY,personBasicInfo.getPersonId());
         if (updateDB > 0){
             log.println("mysql成功修改personId为" + personBasicInfo.getPersonId() + "的基本信息");
         }
@@ -154,7 +152,7 @@ public class PersonBasicInfoController {
     public Result insertInfo(PersonBasicInfo personBasicInfo){
         System.out.println(personBasicInfo);
         int insertDB = personBasicInfoService.insert(personBasicInfo);
-        rabbitTemplate.convertAndSend(PERSON_BASIC_INFO_EXCHANGE,PERSON_BASIC_INFO_INSERT_KEY,personBasicInfo.getPersonId());
+        rabbitTemplate.convertAndSend(MqConstants.PERSON_BASIC_INFO_EXCHANGE, MqConstants.PERSON_BASIC_INFO_INSERT_KEY,personBasicInfo.getPersonId());
         if (insertDB > 0){
             log.println("mysql成功添加personId为" + personBasicInfo.getPersonId() + "的个人信息");
         }
@@ -196,7 +194,7 @@ public class PersonBasicInfoController {
     @ResponseBody
     public Result delete(Integer personId){
         int deleteDB = personBasicInfoService.delete(personId);
-        rabbitTemplate.convertAndSend(PERSON_BASIC_INFO_EXCHANGE,PERSON_BASIC_INFO_DELETE_KEY,personId);
+        rabbitTemplate.convertAndSend(MqConstants.PERSON_BASIC_INFO_EXCHANGE, MqConstants.PERSON_BASIC_INFO_DELETE_KEY,personId);
         if (deleteDB > 0){
             log.println("mysql成功删除personId为" + personId + "的择偶记录");
         }

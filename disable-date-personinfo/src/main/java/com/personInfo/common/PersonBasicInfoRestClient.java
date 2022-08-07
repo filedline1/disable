@@ -2,17 +2,14 @@ package com.personInfo.common;
 
 import com.alibaba.fastjson.JSON;
 import com.personInfo.bean.PersonBasicInfo;
-import com.personInfo.bean.Requirement;
 import com.personInfo.service.PersonBasicInfoService;
 import com.personInfo.util.PageQueryUtil;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
@@ -47,6 +44,20 @@ public class PersonBasicInfoRestClient {
         // 4.结果解析
         handleResponse(response);
     }
+
+    public List<PersonBasicInfoDoc> selectByPersonIds(List<Integer> personIds) throws Exception{
+        //1.准备request
+        SearchRequest request = new SearchRequest("disable-date-basic-info");
+        // 2.准备请求参数
+        request.source().query(QueryBuilders.termsQuery("personId",personIds));
+        // 3.发送请求，得到响应
+        SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+        // 4.结果解析
+        List<PersonBasicInfoDoc> personBasicInfoDocs = handleResponse(response);
+        return personBasicInfoDocs;
+    }
+
+
 
     /**
      * 根据personId搜索指定用户的择偶要求

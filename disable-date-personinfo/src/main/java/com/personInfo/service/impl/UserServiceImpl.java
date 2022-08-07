@@ -21,8 +21,15 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
+
     @Autowired
     private UserMapper userMapper;
+
+
+    public List<User> selectBatch(List<Integer> recordItems){
+        final List<User> users = userMapper.selectBatch(recordItems);
+        return users;
+    }
 
     @Override
     public User login(String loginName, String password) throws ParseException {
@@ -51,9 +58,15 @@ public class UserServiceImpl implements UserService {
         String passwordMD5 = MD5Util.MD5Encode(user.getPasswordMd5(), "UTF-8");
         user.setPasswordMd5(passwordMD5);
         user.setCreateTime(new Date());
-        //账号初始状态设置为锁定和未认证
+        /**
+         * ********
+         * 残疾人注册认证业务
+         * *******
+         */
+        //账号初始状态设置为正常和已认证
         user.setLockedFlag(1);
-        user.setIsDeleted(2);
+        user.setIsDeleted(1);
+        //校验第三库区域
         if (userMapper.insertUser(user) > 0){
             return ServiceResultEnum.SUCCESS.getResult();
         }
@@ -68,23 +81,23 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public String updatePassword(String loginName,String oldPassword,String newPassword) {
+    public int updatePassword(String loginName,String oldPassword,String newPassword) {
         User user = userMapper.selectUserByLoginName(loginName);
         if (user == null){
-            return ServiceResultEnum.USER_NOT_EXIST.getResult();
+            return 0;
         }
         //核对旧密码
         String oldPasswordMD5 = MD5Util.MD5Encode(oldPassword, "UTF-8");
         if (oldPasswordMD5.equals(user.getPasswordMd5())){
             String newPasswordMD5 = MD5Util.MD5Encode(newPassword, "UTF-8");
             user.setPasswordMd5(newPasswordMD5);
-            if (userMapper.updatePassword(loginName,newPassword) > 0){
-                return ServiceResultEnum.SUCCESS.getResult();
+            if (userMapper.updatePassword(loginName,newPasswordMD5) > 0){
+                return 1;
             }
         } else {
-            return ServiceResultEnum.PASSWORD_ERROR.getResult();
+            return 0;
         }
-        return ServiceResultEnum.ERROR.getResult();
+        return 0;
     }
 
     @Override
@@ -154,19 +167,65 @@ public class UserServiceImpl implements UserService {
         return ServiceResultEnum.ERROR.getResult();
     }
 
-    @Override
-    public int openVip(String loginName, Integer month){
-        return userMapper.openVip(loginName, month);
+
+    public int updateHeadPicPath(@Param("loginName") String loginName,@Param("headPicPath") String headPicPath){
+        final int i = userMapper.updateHeadPicPath(loginName, headPicPath);
+        return i;
     }
 
     @Override
-    public int renewalVip(@Param("loginName") String loginName, @Param("month")Integer month){
-        return userMapper.renewalVip(loginName, month);
+    public Date openVip(String loginName, Integer month){
+        if (userMapper.openVip(loginName, month) > 0){
+            final User user = userMapper.selectUserByLoginName(loginName);
+            return user.getExpirationTime();
+        }
+        return null;
+    }
+
+    @Override
+    public Date renewalVip(@Param("loginName") String loginName, @Param("month")Integer month){
+        if (userMapper.renewalVip(loginName, month) > 0){
+            final User user = userMapper.selectUserByLoginName(loginName);
+            return user.getExpirationTime();
+        }
+        return null;
     }
 
 
     public User selectUserByLoginName(String loginName){
         return userMapper.selectUserByLoginName(loginName);
+    }
+
+
+    /**
+     *
+     * @param userId
+     * @return
+     */
+    public User selectByPrimaryKey(Integer userId){
+        final User user = userMapper.selectByPrimaryKey(userId);
+        return user;
+    }
+
+
+    /**
+     * 点赞
+     * @param userId
+     * @return
+     */
+    public int addLikesCount(@Param("userId") Integer userId){
+        final int i = userMapper.addLoveCount(userId);
+        return i;
+    }
+
+    /**
+     * 喜欢
+     * @param userId
+     * @return
+     */
+    public int addLoveCount(@Param("userId") Integer userId){
+        final int i = userMapper.addLoveCount(userId);
+        return i;
     }
 
 }

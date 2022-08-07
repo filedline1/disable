@@ -6,10 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.personInfo.VO.UserVO;
 import com.personInfo.bean.*;
 import com.personInfo.common.ServiceResultEnum;
-import com.personInfo.service.PersonBasicInfoService;
-import com.personInfo.service.PersonDetailInfoService;
-import com.personInfo.service.RequirementService;
-import com.personInfo.service.UserService;
+import com.personInfo.service.*;
 import com.personInfo.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -25,8 +22,8 @@ import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -52,6 +49,12 @@ public class UserController {
 
     @Autowired
     private GetUserFromRedisUtil userUtil;
+
+    @Autowired
+    private FanService fanService;
+
+    @Autowired
+    private FollowService followService;
 
     private static String rightCode;
 
@@ -145,7 +148,7 @@ public class UserController {
                                     @RequestParam("oldPassword") String oldPassword,
                                     @RequestParam("newPassword") String newPassword)
             throws IOException {
-        if(userService.updatePassword(loginName,oldPassword,newPassword).equals(ServiceResultEnum.SUCCESS.getResult())){
+        if(userService.updatePassword(loginName,oldPassword,newPassword) > 0){
             return ResultGenerator.genResult(200,"修改成功",ServiceResultEnum.SUCCESS.getResult());
         }
         return ResultGenerator.genResult(404,"修改失败",ServiceResultEnum.ERROR.getResult());
@@ -168,6 +171,29 @@ public class UserController {
 
     }
 
+
+    @PostMapping("/getAllData")
+    public Result getAllData(@RequestParam("personId") Integer personId)
+            throws IOException {
+        final PersonBasicInfo personBasicInfo = personBasicInfoService.selectByPrimaryKey(personId);
+        final PersonDetailInfo personDetailInfo = personDetailInfoService.selectByPrimaryKey(personId);
+        final Requirement requirement = requirementService.selectByPrimaryKey(personId);
+        Result result = new Result();
+        Map<String,Object> resMap = new HashMap();
+        resMap.put("requirement",requirement);
+        resMap.put("personBasicInfo",personBasicInfo);
+        resMap.put("personDetailInfo",personDetailInfo);
+        if (resMap != null){
+            result.setResultCode(200);
+            result.setMessage("查询成功！");
+        } else {
+            result.setResultCode(500);
+            result.setMessage("查询失败！");
+        }
+        result.setData(resMap);
+        return result;
+    }
+
     @PutMapping("/signIn")
     public synchronized Result signIn(@RequestParam("reward") Integer reward,@RequestParam("loginName") String loginName){
         String message = userService.signIn(reward, loginName);
@@ -181,11 +207,14 @@ public class UserController {
         return ResultGenerator.genSuccessResult("签到成功");
     }
 
+
+
+
     @PostMapping("/openVip")
     public synchronized Result openVip(@RequestParam("loginName") String loginName,@RequestParam("month") Integer month){
-        int i = userService.openVip(loginName, month);
-        if (i > 0){
-            return ResultGenerator.genSuccessResult("开通成功！");
+        final Date date = userService.openVip(loginName, month);
+        if (date != null){
+            return ResultGenerator.genResult(200,"开通成功！",date);
         } else {
             return ResultGenerator.genSuccessResult("开通失败！ 请及时与管理员联系!");
         }
@@ -193,9 +222,9 @@ public class UserController {
 
     @PostMapping("/renewalVip")
     public synchronized Result renewalVip(@RequestParam("loginName") String loginName,@RequestParam("month") Integer month){
-        int i = userService.renewalVip(loginName, month);
-        if (i > 0){
-            return ResultGenerator.genSuccessResult("续费成功！");
+        final Date date = userService.renewalVip(loginName, month);
+        if (date != null){
+            return ResultGenerator.genResult(200,"续费成功！",date);
         } else {
             return ResultGenerator.genSuccessResult("续费失败！ 请及时与管理员联系!");
         }
@@ -210,5 +239,75 @@ public class UserController {
             return ResultGenerator.genFailResult("用户不存在");
         }
     }
+
+    @PostMapping("/getBaseData")
+    public Result getBaseData(@RequestParam ("personId") Integer personId){
+        int fanCount = fanService.selectFollowerCountByUserId(personId);
+        int attentionCount = followService.selectAttentionCountByUserId(personId);
+        User user = userService.selectByPrimaryKey(personId);
+        Integer likes = user.getLikes();
+        Integer love = user.getLove();
+        PersonBaseDate personBaseDate = new PersonBaseDate();
+        personBaseDate.setPersonId(personId);
+        personBaseDate.setAttentionCount(attentionCount);
+        personBaseDate.setFanCount(fanCount);
+        personBaseDate.setLike(likes);
+        personBaseDate.setLove(love);
+        personBaseDate.setNickName(user.getNickName());
+        personBaseDate.setHeadPicPath(user.getHeadPicPath());
+        personBaseDate.setSorts(user.getSorts());
+        Date lastTime = user.getLastTime();
+        System.out.println(user);
+        Date date = new Date();
+        int currentTimeYear = lastTime.getYear();
+        int currentTimeMonth = lastTime.getMonth();
+        int currentTimeDay = lastTime.getDate();
+        if (currentTimeYear < date.getYear()){
+            personBaseDate.setSignIn(false);
+        }
+        else if (currentTimeMonth < date.getMonth()){
+            personBaseDate.setSignIn(false);
+        }
+        else if (currentTimeDay < date.getDate()){
+            personBaseDate.setSignIn(false);
+        }
+        else if (currentTimeDay == date.getDate()){
+            personBaseDate.setSignIn(true);
+        }
+        return ResultGenerator.genSuccessResult(personBaseDate);
+    }
+
+
+    @PostMapping("/addLove")
+    public synchronized Result addLove(@RequestParam("userId") Integer userId){
+        int i = userService.addLoveCount(userId);
+        if (i > 0){
+            return ResultGenerator.genSuccessResult("喜欢成功");
+        } else {
+            return ResultGenerator.genFailResult("服务失败，请联系管理员！");
+        }
+    }
+
+    @PostMapping("/addLike")
+    public synchronized Result addLike(@RequestParam("userId") Integer userId){
+        int i = userService.addLoveCount(userId);
+        if (i > 0){
+            return ResultGenerator.genSuccessResult("点赞成功");
+        } else {
+            return ResultGenerator.genFailResult("服务失败，请联系管理员！");
+        }
+    }
+
+    @PostMapping("/updateHeadPicPath")
+    public Result updateHeadPicPath(@RequestParam("loginName") String loginName, @RequestParam("headPicPath") String headPicPath){
+        final int i = userService.updateHeadPicPath(loginName, headPicPath);
+        if (i > 0){
+            return ResultGenerator.genSuccessResult("更新头像成功");
+        } else {
+            return ResultGenerator.genFailResult("更新头像失败");
+        }
+    }
+
+
 
 }

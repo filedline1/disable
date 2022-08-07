@@ -18,11 +18,26 @@
     update_admin
   </sql>
 
+  <select id="findRecordList" parameterType="Map" resultMap="BaseResultMap">
+    SELECT * FROM
+    `tb_disable_date_vip_permissions`
+    <if test="start!=null and limit!=null">
+      LIMIT #{start},#{limit}
+    </if>
+  </select>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from tb_disable_date_vip_permissions
     where config_id = #{configId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_disable_date_vip_permissions
+    where user_id = #{userId,jdbcType=BIGINT}
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">

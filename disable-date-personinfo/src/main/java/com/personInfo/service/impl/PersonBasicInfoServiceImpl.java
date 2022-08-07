@@ -2,7 +2,6 @@ package com.personInfo.service.impl;
 
 
 import com.personInfo.bean.PersonBasicInfo;
-import com.personInfo.bean.PersonDetailInfo;
 import com.personInfo.mapper.PersonBasicInfoMapper;
 import com.personInfo.service.PersonBasicInfoService;
 import com.personInfo.util.NickNameUtil;
