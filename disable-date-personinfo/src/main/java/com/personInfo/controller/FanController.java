@@ -17,6 +17,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -48,41 +49,59 @@ public class FanController {
      */
     @RequestMapping(value = "/searchFan", method = RequestMethod.POST)
     @ResponseBody
-    public Result selectFollowerByUserId(@Param("follower")Integer follower, @Param("start")Integer start, @Param("limit")Integer limit) throws Exception{
+    public Result selectFollowerByUserId(@Param("follower") Integer follower, @Param("start") Integer start, @Param("limit") Integer limit) throws Exception {
         if (limit == null || start == null) {
-            return ResultGenerator.genErrorResult(400,"参数传递格式有误！");
+            return ResultGenerator.genErrorResult ( 400, "参数传递格式有误！" );
         }
-        System.out.println(follower);
-        List<Fan> fans = fanService.selectFollowerByUserId(follower, start, limit);
-        List<Integer> usersId = new ArrayList<>();
-        for (Fan fan : fans){
-            Integer userId = fan.getUserId();
-            usersId.add(userId);
+        System.out.println ( follower );
+        List<Fan> fans = fanService.selectFollowerByUserId ( follower, start, limit );
+        List<Integer> usersId = new ArrayList<> ();
+        for (Fan fan : fans) {
+            Integer userId = fan.getUserId ();
+            usersId.add ( userId );
         }
-        System.out.println(usersId);
-        final List<PersonBasicInfoDoc> personBasicInfoDocs = basicInfoRestClient.selectByPersonIds(usersId);
-        final List<User> users = userService.selectBatch(usersId);
-        Iterator vars = personBasicInfoDocs.iterator();
+        // 无粉丝直接返回
+        if (usersId.isEmpty()) {
+            return ResultGenerator.genSuccessResult ("你可能没有关注的人呢,快去关注试试吧！");
+        }
 
-        while(vars.hasNext()) {
-            PersonBasicInfoDoc personBasicInfoDoc = (PersonBasicInfoDoc) vars.next();
-            System.out.println(personBasicInfoDoc);
+        final List<PersonBasicInfoDoc> personBasicInfoDocs;
+        System.out.println ( usersId );
+        try {
+            personBasicInfoDocs = basicInfoRestClient.selectByPersonIds ( usersId );
+        } catch (IOException e){
+            return ResultGenerator.genFailResult("数据缓存层出现异常！");
         }
-        List<FanVO> fanVOS = new ArrayList<>();
-        for (int i = 0; i < fans.size(); i++) {
-            FanVO fanVO = new FanVO();
-            Fan fan = fans.get(i);
-            PersonBasicInfoDoc personBasicInfoDoc = personBasicInfoDocs.get(i);
-            User user = users.get(i);
-            fanVO.setUserId(fan.getUserId());
-            fanVO.setStatus(fan.getStatus());
-            fanVO.setPersonSign(personBasicInfoDoc.getPersonSign());
-            fanVO.setNickName(user.getNickName());
-            fanVO.setHeadPicPath(user.getHeadPicPath());
-            fanVOS.add(fanVO);
+        final List<User> users = userService.selectBatch ( usersId );
+        for (PersonBasicInfoDoc temp : personBasicInfoDocs){
+            System.out.println("personBasicDoc:" + temp);
+        }
+        List<FanVO> fanVOS;
+        try {
+            fanVOS = new ArrayList<> ();
+            for (int i = 0; i < fans.size (); i++) {
+                FanVO fanVO = new FanVO ();
+                Fan fan = fans.get ( i );
+                fanVO.setUserId ( fan.getUserId () );
+                fanVO.setStatus ( fan.getStatus () );
+                if(i < personBasicInfoDocs.size()){
+                    PersonBasicInfoDoc personBasicInfoDoc = personBasicInfoDocs.get ( i );
+                    fanVO.setPersonSign ( personBasicInfoDoc.getPersonSign () );
+                }
+                if(i < users.size()){
+                    User user = users.get ( i );
+                    fanVO.setNickName ( user.getNickName () );
+                    fanVO.setHeadPicPath ( user.getHeadPicPath () );
+                }
+                fanVOS.add ( fanVO );
+            }
+        } catch (Exception e) {
+            return ResultGenerator.genSuccessResult("你可能没有关注的人呢,快去关注试试吧！");
         }
         return ResultGenerator.genSuccessResult(fanVOS);
     }
+
+
 
 
     /**
