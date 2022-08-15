@@ -62,10 +62,10 @@ public class FanController {
         System.out.println(usersId);
         final List<PersonBasicInfoDoc> personBasicInfoDocs = basicInfoRestClient.selectByPersonIds(usersId);
         final List<User> users = userService.selectBatch(usersId);
-        Iterator var16 = personBasicInfoDocs.iterator();
+        Iterator vars = personBasicInfoDocs.iterator();
 
-        while(var16.hasNext()) {
-            PersonBasicInfoDoc personBasicInfoDoc = (PersonBasicInfoDoc)var16.next();
+        while(vars.hasNext()) {
+            PersonBasicInfoDoc personBasicInfoDoc = (PersonBasicInfoDoc) vars.next();
             System.out.println(personBasicInfoDoc);
         }
         List<FanVO> fanVOS = new ArrayList<>();
