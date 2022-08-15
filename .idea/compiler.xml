@@ -10,6 +10,8 @@
         <module name="disable-date-admin" />
         <module name="disable-date-oauth2" />
         <module name="disable-date-nacos" />
+        <module name="disable-date-disable.date.message.common" />
+        <module name="api-example" />
         <module name="disable-date-relation" />
         <module name="disable-date-gateway" />
         <module name="disable-date-personinfo" />
@@ -26,7 +28,9 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="api-example" options="-parameters" />
       <module name="disable-date-admin" options="" />
+      <module name="disable-date-gateway" options="-parameters" />
       <module name="disable-date-message" options="" />
       <module name="disable-date-personinfo" options="" />
       <module name="disable-date-relation" options="" />

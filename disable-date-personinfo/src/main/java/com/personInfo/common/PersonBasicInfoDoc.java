@@ -1,5 +1,6 @@
 package com.personInfo.common;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.personInfo.bean.PersonBasicInfo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,7 +42,7 @@ public class PersonBasicInfoDoc {
 
     private String carStatus;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date expectedMarryTime;
 
     private String personIntro;

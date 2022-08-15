@@ -1,0 +1,68 @@
+server:
+  port: 8088
+spring:
+  application:
+    name: gateway
+  redis:
+    host: 120.26.7.136
+    port: 6379
+    timeout: 1000000
+    password: 123456
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://120.26.7.136:3306/tb_disable_date?serverTimezone=Asia/Shanghai&useSSL=false&autoReconnect=true&characterEncoding=utf-8
+    username: root
+    password: 666666
+    name: tb_disable_date-datasource
+  cloud:
+    nacos:
+      server-addr: localhost:8848 # nacos地址
+    # gateway配置
+    gateway:
+      routes:
+        - id: personinfo-router     #路由的唯一标识
+          uri: http://localhost:8082     #lb: 使用 nacos 中的本地负载均衡策略 person-info-服务名
+          predicates:
+            - Path=/personinfo-server/**
+          filters:
+            - StripPrefix=1
+        - id : relation-router
+          uri : http://localhost:8083
+          predicates:
+            - Path=/relation-server/**
+          filters:
+            - StripPrefix=1 #转发之前去掉第一层路径
+        - id: square-router
+          uri: http://localhost:8084
+          predicates:
+            - Path=/square-server/**
+          filters:
+            - StripPrefix=1 #转发之前去掉第一层路径
+        - id: message-router
+          uri: http://localhost:8085
+          predicates:
+            - Path=/message-server/**
+          filters:
+            - StripPrefix=1 #转发之前去掉第一层路径
+        - id: admin-router
+          uri: http://localhost:8086
+          predicates:
+            - Path=/admin-server/**
+          filters:
+            - StripPrefix=1 #转发之前去掉第一层路径
+      globalcors:
+        cors-configurations:
+          '[/**]':  # 允许跨域访问的资源
+            allowedOrigins: "*" # 跨域允许来源
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+    #配置sentinel
+    sentinel:
+      transport:
+        dashboard: localhost:8080
+      enabled: true
+      eager: true
+

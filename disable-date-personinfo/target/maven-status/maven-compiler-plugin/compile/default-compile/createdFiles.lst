@@ -32,15 +32,19 @@ com\personInfo\common\PersonBasicInfoRestClient.class
 com\personInfo\controller\FanController.class
 com\personInfo\bean\ApiResult.class
 com\personInfo\mapper\PersonDetailInfoMapper.class
+com\personInfo\bean\VipPackage.class
 com\personInfo\mq\PersonDetailInfoListener.class
 com\personInfo\controller\PersonDetailInfoController.class
 com\personInfo\util\Result.class
 com\personInfo\util\JsonUtil.class
+com\personInfo\service\VipPackageService.class
 com\personInfo\util\VerifyCodeUtil.class
 com\personInfo\service\PersonBasicInfoService.class
 com\personInfo\service\impl\UserServiceImpl.class
+com\personInfo\service\impl\VipPackageServiceImpl.class
 com\personInfo\util\JWTUtil.class
 com\personInfo\common\PersonDetailInfoRestClient.class
+com\personInfo\controller\VipPackageContrller.class
 com\personInfo\mapper\UserMapper.class
 com\personInfo\controller\RequirementController.class
 com\personInfo\VO\FanVO.class
@@ -61,6 +65,7 @@ com\personInfo\mq\RequirementListener.class
 com\personInfo\util\ApiResultHandler.class
 com\personInfo\bean\Requirement.class
 com\personInfo\bean\PersonBasicInfo.class
+com\personInfo\mapper\VipPackageMapper.class
 com\personInfo\service\impl\VipPermissionServiceImpl.class
 com\personInfo\bean\Fan.class
 com\personInfo\bean\PersonDetailInfo.class

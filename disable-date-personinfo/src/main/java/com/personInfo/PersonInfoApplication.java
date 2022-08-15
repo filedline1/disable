@@ -13,7 +13,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-
 @SpringBootApplication
 public class PersonInfoApplication {
 
@@ -24,7 +23,7 @@ public class PersonInfoApplication {
     @Bean
     public RestHighLevelClient client(){
         return new RestHighLevelClient(RestClient.builder(
-                HttpHost.create("http://120.26.7.136:9200")
+                HttpHost.create("http://119.91.135.239:9200")
         ));
     }
 

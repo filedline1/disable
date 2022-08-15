@@ -56,7 +56,7 @@ public class PersonBasicInfoListener {
 
 
     /**
-     * 监听 动态的 删除 的业务
+     * 异步处理&MQ监听整合
      * @param id
      */
     @RabbitListener(queues = MqConstants.PERSON_BASIC_INFO_DELETE_QUEUE)
@@ -67,7 +67,7 @@ public class PersonBasicInfoListener {
     }
 
     /**
-     * 监听 动态的 删除 的业务
+     * 异步处理&MQ监听整合
      * @param id
      */
     @RabbitListener(queues = MqConstants.PERSON_BASIC_INFO_DELETE_QUEUE)

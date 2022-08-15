@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gateway.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.gateway.bean.User">
+        <id column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName"/>
+        <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
+        <result column="password_md5" jdbcType="VARCHAR" property="passwordMd5"/>
+        <result column="sex" jdbcType="TINYINT" property="sex"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="is_vip" jdbcType="TINYINT" property="isVip"/>
+        <result column="love" jdbcType="INTEGER" property="love"/>
+        <result column="likes" jdbcType="INTEGER" property="likes"/>
+        <result column="sorts" jdbcType="INTEGER" property="sorts"/>
+        <result column="disable_number" jdbcType="VARCHAR" property="disableNumber"/>
+        <result column="head_pic_path" jdbcType="VARCHAR" property="headPicPath"/>
+        <result column="online_time" jdbcType="VARCHAR" property="onlineTime"/>
+        <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
+        <result column="locked_flag" jdbcType="TINYINT" property="lockedFlag"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="last_time" jdbcType="TIMESTAMP" property="lastTime"/>
+        <result column="expiration_time" jdbcType="TIMESTAMP" property="expirationTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        user_id, nick_name, login_name, password_md5,sex,age,is_vip,love,likes,sorts,disable_number,head_pic_path,online_time,
+        is_deleted, locked_flag, create_time,update_time,last_time,expiration_time
+    </sql>
+
+    <select id="selectBatch" resultMap="BaseResultMap">
+        select * from `tb_disable_date_user` where user_id in (
+        <foreach collection="recordItems" item="recordItem" separator=",">
+                #{recordItem,jdbcType=INTEGER}
+        </foreach>
+        )
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `tb_disable_date_user`
+        where user_id = #{userId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectUserByLoginName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `tb_disable_date_user`
+        where login_name = #{loginName,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectUserByNickName" parameterType="Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `tb_disable_date_user`
+        where nick_name = #{nickName,jdbcType=VARCHAR}
+    </select>
+
+
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="userId"
+            parameterType="com.gateway.bean.User">
+        insert into `tb_disable_date_user`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="nickName != null">
+                nick_name,
+            </if>
+            <if test="loginName != null">
+                login_name,
+            </if>
+            <if test="passwordMd5 != null">
+                password_md5,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+            <if test="lockedFlag != null">
+                locked_flag,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="nickName != null">
+                #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="loginName != null">
+                #{loginName,jdbcType=VARCHAR},
+            </if>
+            <if test="passwordMd5 != null">
+                #{passwordMd5,jdbcType=VARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=INTEGER},
+            </if>
+            <if test="lockedFlag != null">
+                #{lockedFlag,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="addLoveCount" >
+        update `tb_disable_date_user`
+        set
+            love = love + 1
+        where user_id = #{userId,jdbcType=INTEGER}
+    </update>
+
+    <update id="addLikesCount" >
+        update `tb_disable_date_user`
+        set
+            likes = likes + 1
+        where user_id = #{userId,jdbcType=INTEGER}
+    </update>
+
+    <update id="signIn" >
+        update `tb_disable_date_user`
+        set
+            sorts = sorts + #{param1},
+            `last_time` = CURRENT_TIMESTAMP
+        where login_name = #{param2}
+    </update>
+
+    <update id="openVip" >
+        update `tb_disable_date_user`
+        set
+            expiration_time = date_add(NOW(),interval #{param2} MONTH),
+            is_vip = 1
+        where login_name = #{param1}
+    </update>
+
+    <update id="renewalVip" >
+        update `tb_disable_date_user`
+        set
+            expiration_time = date_add(expiration_time,interval #{param2} MONTH),
+            is_vip = 1
+        where login_name = #{param1}
+    </update>
+
+    <update id="updatePassword" parameterType="java.lang.String">
+    update `tb_disable_date_user`
+    set
+        password_md5 = #{newPassword,jdbcType=VARCHAR}
+    where login_name = #{loginName,jdbcType=VARCHAR}
+  </update>
+
+    <update id="updateNickName" parameterType="java.lang.String">
+        update `tb_disable_date_user`
+        set
+            nick_name = #{nickName,jdbcType=VARCHAR}
+        where login_name = #{loginName,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateHeadPicPath" parameterType="java.lang.String">
+        update `tb_disable_date_user`
+        set
+            head_pic_path = #{headPicPath,jdbcType=VARCHAR}
+        where login_name = #{loginName,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from `tb_disable_date_user` where user_id = #{userId}
+    </delete>
+
+</mapper>

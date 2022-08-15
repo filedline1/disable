@@ -1,6 +1,7 @@
 package com.personInfo.bean;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -12,6 +13,8 @@ public class VipPermission {
 
     private Byte isView;
 
+    private Byte isModify;
+
     private Integer likes;
 
     private Integer albumCount;
@@ -20,7 +23,7 @@ public class VipPermission {
 
     private Byte isBack;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     private Integer updateAdmin;
@@ -95,5 +98,13 @@ public class VipPermission {
 
     public void setUpdateAdmin(Integer updateAdmin) {
         this.updateAdmin = updateAdmin;
+    }
+
+    public Byte getIsModify() {
+        return isModify;
+    }
+
+    public void setIsModify(Byte isModify) {
+        this.isModify = isModify;
     }
 }

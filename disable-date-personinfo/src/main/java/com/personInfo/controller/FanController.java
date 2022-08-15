@@ -1,7 +1,5 @@
 package com.personInfo.controller;
 
-
-
 import com.personInfo.VO.FanVO;
 import com.personInfo.VO.FollowVO;
 import com.personInfo.bean.Fan;

@@ -103,7 +103,7 @@ public class RequirementController {
         if (updateDB > 0 ){
             return ResultGenerator.genSuccessResult();
         } else {
-            return ResultGenerator.genFailResult("添加失败");
+            return ResultGenerator.genFailResult("修改失败");
         }
     }
 

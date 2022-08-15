@@ -117,4 +117,5 @@ public class VipPermissionController {
         return ResultGenerator.genFailResult("更新失败");
     }
 
+
 }

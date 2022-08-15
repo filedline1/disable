@@ -5,6 +5,7 @@
     <id column="config_id" jdbcType="BIGINT" property="configId" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="is_view" jdbcType="TINYINT" property="isView" />
+    <result column="is_modify" jdbcType="TINYINT" property="isModify" />
     <result column="likes" jdbcType="INTEGER" property="likes" />
     <result column="album_count" jdbcType="INTEGER" property="albumCount" />
     <result column="diary_pic_count" jdbcType="INTEGER" property="diaryPicCount" />
@@ -14,7 +15,7 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    config_id, user_id, is_view, likes, album_count, diary_pic_count, is_back, update_time, 
+    config_id, user_id, is_modify,is_view, likes, album_count, diary_pic_count, is_back, update_time,
     update_admin
   </sql>
 
@@ -46,11 +47,11 @@
   </delete>
 
   <insert id="insert" parameterType="com.personInfo.bean.VipPermission">
-    insert into tb_disable_date_vip_permissions (config_id, user_id, is_view, 
+    insert into tb_disable_date_vip_permissions (config_id, user_id, is_modify,is_view,
       likes, album_count, diary_pic_count, 
       is_back, update_time, update_admin
       )
-    values (#{configId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{isView,jdbcType=TINYINT}, 
+    values (#{configId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{isModify,jdbcType=TINYINT},#{isView,jdbcType=TINYINT},
       #{likes,jdbcType=INTEGER}, #{albumCount,jdbcType=INTEGER}, #{diaryPicCount,jdbcType=INTEGER}, 
       #{isBack,jdbcType=TINYINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateAdmin,jdbcType=INTEGER}
       )
@@ -64,6 +65,9 @@
       </if>
       <if test="userId != null">
         user_id,
+      </if>
+      <if test="isModify != null">
+        is_modify,
       </if>
       <if test="isView != null">
         is_view,
@@ -93,6 +97,9 @@
       </if>
       <if test="userId != null">
         #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="isModify != null">
+        #{isModify,jdbcType=TINYINT},
       </if>
       <if test="isView != null">
         #{isView,jdbcType=TINYINT},
@@ -125,6 +132,9 @@
       <if test="userId != null">
         user_id = #{userId,jdbcType=BIGINT},
       </if>
+      <if test="isModify != null">
+        is_modify = #{isModify,jdbcType=TINYINT},
+      </if>
       <if test="isView != null">
         is_view = #{isView,jdbcType=TINYINT},
       </if>
@@ -152,6 +162,7 @@
   <update id="updateByPrimaryKey" parameterType="com.personInfo.bean.VipPermission">
     update tb_disable_date_vip_permissions
     set user_id = #{userId,jdbcType=BIGINT},
+      is_modify = #{isModify,jdbcType=TINYINT},
       is_view = #{isView,jdbcType=TINYINT},
       likes = #{likes,jdbcType=INTEGER},
       album_count = #{albumCount,jdbcType=INTEGER},

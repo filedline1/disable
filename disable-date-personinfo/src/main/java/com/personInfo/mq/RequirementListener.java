@@ -35,7 +35,6 @@ public class RequirementListener {
             } catch (Exception e){
                 logger.info("RequirementInsert Insert MQ 队列1 MQ出现异常异常！");
             }
-//            requirementRestClient.insertCommentToIndexById(message);
             System.out.println("[REQUIREMENT_INSERT_QUEUE队列1] 根据personId找出Requirement并新增到索引库--->" + LocalTime.now());
             logger.info("Token时效队列 监听1（String） {} 中消息： {}",MqConstants.REQUIREMENT_INSERT_QUEUE,personId);
         }
@@ -50,7 +49,6 @@ public class RequirementListener {
             } catch (Exception e){
                 logger.info("RequirementInsert Insert MQ 队列2 MQ出现异常异常！");
             }
-//            requirementRestClient.insertCommentToIndexById(message);
             System.out.println("[REQUIREMENT_INSERT_QUEUE队列2] 根据personId找出Requirement并新增到索引库--->" + LocalTime.now());
             logger.info("Token时效队列 监听1（String） {} 中消息： {}",MqConstants.REQUIREMENT_INSERT_QUEUE,personId);
         }
@@ -58,7 +56,7 @@ public class RequirementListener {
 
 
     /**
-     * 监听 动态的 删除 的业务
+     * 异步处理&MQ监听整合
      * @param id
      */
     @RabbitListener(queues = MqConstants.REQUIREMENT_DELETE_QUEUE)
@@ -69,7 +67,7 @@ public class RequirementListener {
     }
 
     /**
-     * 监听 动态的 删除 的业务
+     * 异步处理&MQ监听整合
      * @param id
      */
     @RabbitListener(queues = MqConstants.REQUIREMENT_DELETE_QUEUE)

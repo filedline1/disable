@@ -56,6 +56,9 @@ public class UserController {
     @Autowired
     private FollowService followService;
 
+    @Autowired
+    private VipPermissionService vipPermissionService;
+
     private static String rightCode;
 
     @PostMapping("/login")
@@ -248,6 +251,7 @@ public class UserController {
         Integer likes = user.getLikes();
         Integer love = user.getLove();
         PersonBaseDate personBaseDate = new PersonBaseDate();
+        VipPermission vipPermission = vipPermissionService.selectByUserId(personId.longValue());
         personBaseDate.setPersonId(personId);
         personBaseDate.setAttentionCount(attentionCount);
         personBaseDate.setFanCount(fanCount);
@@ -256,6 +260,13 @@ public class UserController {
         personBaseDate.setNickName(user.getNickName());
         personBaseDate.setHeadPicPath(user.getHeadPicPath());
         personBaseDate.setSorts(user.getSorts());
+        personBaseDate.setIsVip(user.getIsVip());
+        personBaseDate.setExpirationTime(user.getExpirationTime());
+        if (vipPermission != null){
+            personBaseDate.setIsModify(vipPermission.getIsModify());
+        } else {
+            personBaseDate.setIsModify((byte) 0);
+        }
         Date lastTime = user.getLastTime();
         System.out.println(user);
         Date date = new Date();

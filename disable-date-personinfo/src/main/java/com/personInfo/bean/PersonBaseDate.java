@@ -1,6 +1,7 @@
 package com.personInfo.bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -28,13 +29,17 @@ public class PersonBaseDate {
 
     private Boolean isSignIn;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date expiration_time;
+    private Byte isModify;
+
+    private Integer isVip;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date expirationTime;
 
     public PersonBaseDate() {
     }
 
-    public PersonBaseDate(Integer personId, String nickName, String headPicPath, Integer attentionCount, Integer fanCount, Integer like, Integer love, Integer sorts, Boolean isSignIn, Date expiration_time) {
+    public PersonBaseDate(Integer personId, String nickName, String headPicPath, Integer attentionCount, Integer fanCount, Integer like, Integer love, Integer sorts, Boolean isSignIn, Byte isModify, Integer isVip, Date expirationTime) {
         this.personId = personId;
         this.nickName = nickName;
         this.headPicPath = headPicPath;
@@ -44,7 +49,9 @@ public class PersonBaseDate {
         this.love = love;
         this.sorts = sorts;
         this.isSignIn = isSignIn;
-        this.expiration_time = expiration_time;
+        this.isModify = isModify;
+        this.isVip = isVip;
+        this.expirationTime = expirationTime;
     }
 
     public Integer getPersonId() {
@@ -119,12 +126,28 @@ public class PersonBaseDate {
         isSignIn = signIn;
     }
 
-    public Date getExpiration_time() {
-        return expiration_time;
+    public Date getExpirationTime() {
+        return expirationTime;
     }
 
-    public void setExpiration_time(Date expiration_time) {
-        this.expiration_time = expiration_time;
+    public void setExpirationTime(Date expirationTime) {
+        this.expirationTime = expirationTime;
+    }
+
+    public Byte getIsModify() {
+        return isModify;
+    }
+
+    public void setIsModify(Byte isModify) {
+        this.isModify = isModify;
+    }
+
+    public Integer getIsVip() {
+        return isVip;
+    }
+
+    public void setIsVip(Integer isVip) {
+        this.isVip = isVip;
     }
 
     @Override
@@ -139,7 +162,9 @@ public class PersonBaseDate {
                 ", love=" + love +
                 ", sorts=" + sorts +
                 ", isSignIn=" + isSignIn +
-                ", expiration_time=" + expiration_time +
+                ", isModify=" + isModify +
+                ", isVip=" + isVip +
+                ", expirationTime=" + expirationTime +
                 '}';
     }
 }

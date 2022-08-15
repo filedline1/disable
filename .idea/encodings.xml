@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/api-example/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/disable-date-admin/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/disable-date-admin/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/disable-date-gateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/disable-date-message/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/disable-date-message/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/disable-date-personinfo/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/disable-date-personinfo/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/disable-date-relation/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>
 </project>

@@ -13,7 +13,9 @@ D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\VO\UserVO.ja
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\bean\ApiResult.java
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\constants\FanStatus.java
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\controller\FanController.java
+D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\service\VipPackageService.java
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\service\VipPermissionService.java
+D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\mapper\VipPackageMapper.java
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\common\ServiceResultEnum.java
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\service\impl\UserServiceImpl.java
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\util\ApiResultHandler.java
@@ -33,6 +35,7 @@ D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\VO\FanVO.jav
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\mapper\FollowMapper.java
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\controller\PersonBasicInfoController.java
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\util\GetUserFromRedisUtil.java
+D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\controller\VipPackageContrller.java
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\service\FollowService.java
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\common\RestClientLibrary.java
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\bean\PictureAlbum.java
@@ -46,9 +49,11 @@ D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\mq\PersonDet
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\service\impl\FollowServiceImpl.java
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\config\MqConfig.java
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\service\impl\PersonDetailInfoServiceImpl.java
+D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\bean\VipPackage.java
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\util\VerifyCodeUtil.java
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\bean\PersonBaseDate.java
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\util\NickNameUtil.java
+D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\service\impl\VipPackageServiceImpl.java
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\service\UserService.java
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\bean\PersonDetailInfo.java
 D:\theDisabled\disable-date-personinfo\src\main\java\com\personInfo\mq\PersonBasicInfoListener.java

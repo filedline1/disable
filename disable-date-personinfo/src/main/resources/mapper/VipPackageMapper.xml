@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.personInfo.mapper.VipPackageMapper">
+  <resultMap id="BaseResultMap" type="com.personInfo.bean.VipPackage">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="time" jdbcType="INTEGER" property="time" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="total_price" jdbcType="DOUBLE" property="totalPrice" />
+    <result column="package_status" jdbcType="INTEGER" property="packageStatus" />
+    <result column="advice_first" jdbcType="INTEGER" property="adviceFirst" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, name, time, price, total_price, package_status, advice_first, create_time, update_time
+  </sql>
+
+  <select id="findRecordList" parameterType="Map" resultMap="BaseResultMap">
+    SELECT * FROM
+    `tb_disable_date_admin_vip_package`
+    <if test="start!=null and limit!=null">
+      LIMIT #{start},#{limit}
+    </if>
+  </select>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_disable_date_admin_vip_package
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_disable_date_admin_vip_package
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.personInfo.bean.VipPackage">
+    insert into tb_disable_date_admin_vip_package (id, name, time, 
+      price, total_price, package_status, 
+      advice_first, create_time, update_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{time,jdbcType=INTEGER}, 
+      #{price,jdbcType=DOUBLE}, #{totalPrice,jdbcType=DOUBLE}, #{packageStatus,jdbcType=INTEGER}, 
+      #{adviceFirst,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.personInfo.bean.VipPackage">
+    insert into tb_disable_date_admin_vip_package
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="totalPrice != null">
+        total_price,
+      </if>
+      <if test="packageStatus != null">
+        package_status,
+      </if>
+      <if test="adviceFirst != null">
+        advice_first,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="totalPrice != null">
+        #{totalPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="packageStatus != null">
+        #{packageStatus,jdbcType=INTEGER},
+      </if>
+      <if test="adviceFirst != null">
+        #{adviceFirst,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.personInfo.bean.VipPackage">
+    update tb_disable_date_admin_vip_package
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="totalPrice != null">
+        total_price = #{totalPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="packageStatus != null">
+        package_status = #{packageStatus,jdbcType=INTEGER},
+      </if>
+      <if test="adviceFirst != null">
+        advice_first = #{adviceFirst,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.personInfo.bean.VipPackage">
+    update tb_disable_date_admin_vip_package
+    set name = #{name,jdbcType=VARCHAR},
+      time = #{time,jdbcType=INTEGER},
+      price = #{price,jdbcType=DOUBLE},
+      total_price = #{totalPrice,jdbcType=DOUBLE},
+      package_status = #{packageStatus,jdbcType=INTEGER},
+      advice_first = #{adviceFirst,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
